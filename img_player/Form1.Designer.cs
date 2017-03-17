@@ -43,6 +43,9 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.play_pro = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.imgDealEnable = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.play_bar)).BeginInit();
@@ -112,7 +115,7 @@
             this.文件ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(574, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(694, 28);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -127,7 +130,7 @@
             // 添加文件ToolStripMenuItem
             // 
             this.添加文件ToolStripMenuItem.Name = "添加文件ToolStripMenuItem";
-            this.添加文件ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.添加文件ToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.添加文件ToolStripMenuItem.Text = "添加文件";
             this.添加文件ToolStripMenuItem.Click += new System.EventHandler(this.添加文件ToolStripMenuItem_Click);
             // 
@@ -141,7 +144,7 @@
             // 
             // Open
             // 
-            this.Open.Location = new System.Drawing.Point(407, 332);
+            this.Open.Location = new System.Drawing.Point(564, 314);
             this.Open.Name = "Open";
             this.Open.Size = new System.Drawing.Size(79, 23);
             this.Open.TabIndex = 9;
@@ -153,7 +156,7 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(358, 56);
+            this.listBox1.Location = new System.Drawing.Point(515, 56);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(167, 244);
             this.listBox1.TabIndex = 10;
@@ -171,11 +174,41 @@
             this.play_pro.TabIndex = 11;
             this.play_pro.Text = "label1";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(358, 70);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(23, 15);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "ke";
+            // 
+            // imgDealEnable
+            // 
+            this.imgDealEnable.AutoSize = true;
+            this.imgDealEnable.Location = new System.Drawing.Point(407, 404);
+            this.imgDealEnable.Name = "imgDealEnable";
+            this.imgDealEnable.Size = new System.Drawing.Size(101, 19);
+            this.imgDealEnable.TabIndex = 13;
+            this.imgDealEnable.Text = "checkBox1";
+            this.imgDealEnable.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(407, 67);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(100, 25);
+            this.textBox1.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(574, 439);
+            this.ClientSize = new System.Drawing.Size(694, 439);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.imgDealEnable);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.play_pro);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.Open);
@@ -215,6 +248,9 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label play_pro;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox imgDealEnable;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

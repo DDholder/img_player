@@ -13,7 +13,7 @@ namespace img_player
 {
     public struct points
     {
-        public byte[] img;
+        public int[] img;
     }
     public partial class Form1 : Form
     {
@@ -29,6 +29,7 @@ namespace img_player
         string state = "stop";
         string[] filenames = new string[100];
         bool filestrflag = false;
+        img_deal img_Handler = new img_deal();
         private void Play_Pause_Click(object sender, EventArgs e)
         {
             if (timer1.Enabled)
@@ -61,10 +62,16 @@ namespace img_player
             play_bar.Maximum = time;
             play_bar.Value = retime;
             play_pro.Text = retime.ToString() + "/" + time.ToString();
+            if (imgDealEnable.Checked)
+            {
+                img_Handler.imgbuff = fps[num].img;
+                img_Handler.image_deal();
+                textBox1.Text = img_Handler.ke.ToString();
+            }
             Changemap(fps[num].img);
             Display(map);
         }
-        void Changemap(byte[] imgbuff)
+        void Changemap(int[] imgbuff)
         {
             for (int i = 0; i < 60; i++)
             {
@@ -156,7 +163,7 @@ namespace img_player
         }
         void Read_imgFile(byte[] str, int fpsLength)
         {
-            fps[time].img = new byte[600];
+            fps[time].img = new int[600];
             for (int i = 0; i < fpsLength; i++)
             {
                 if (str[i] == 0xaa && str[i + 1] == 0xbb)
@@ -175,7 +182,7 @@ namespace img_player
                         }
                         readList.Clear();
                         time++;
-                        fps[time].img = new byte[600];
+                        fps[time].img = new int[600];
                     }
             }
         }
