@@ -23,10 +23,10 @@ namespace img_player
         byte All_White = 2;
         byte None = 0;
         /***********************************************************************/
-       public int[] imgbuff = new int[600];      //定义存储接收图像的数组
+        public int[] imgbuff = new int[600];      //定义存储接收图像的数组
         int[] img = new int[4800];     //解压后数组
         int[,] IMG_BUFF = new int[60, 80];
-      public  void image_deal()
+        public void image_deal()
         {
             //camera_get_img();                       //获取图像
             img_extract(img, imgbuff, 600); //解压图像											
@@ -225,91 +225,93 @@ namespace img_player
                 for (j = BlackLineData[i]; j >= 0; j--)  //////////////////////////////////
                 {
                     //中->左搜索
-                    if (LeftBlack[i] == BlackLineData[i])
-                    {
+                    if (pLeft - 5 > 0 && pLeft < 80)
+                        if (LeftBlack[i] == BlackLineData[i])
+                        {
 
-                        if (IMG_BUFF[i, pLeft] == Black)
-                        {
-                            CountBlack++;//黑点计数
-                        }
-                        else
-                        {
-                            CountWhite++;//白点计数
-                        }
-                        // 未找到左边缘则寻找
-                        if (IMG_BUFF[i, pLeft] != IMG_BUFF[i, pLeft - 3])//检测到边缘
-                        {
-                            //单线
-                            if (ABS(OV7725_EAGLE_M - pLeft) <= 3)
+                            if (IMG_BUFF[i, pLeft] == Black)
                             {
-                                //找到左边缘
-                                LeftBlack[i] = pLeft - 2;
+                                CountBlack++;//黑点计数
                             }
-                            //确认检测到边缘
-                            else if (IMG_BUFF[i, pLeft - 1] != IMG_BUFF[i, pLeft - 4] && IMG_BUFF[i, pLeft - 2] != IMG_BUFF[i, pLeft - 5])
+                            else
                             {
-                                //找到左边缘
-                                LeftBlack[i] = pLeft - 2;
-                                //右边缘也找到
-                                if (RightBlack[i] != OV7725_EAGLE_W - 1)
+                                CountWhite++;//白点计数
+                            }
+                            // 未找到左边缘则寻找
+                            if (IMG_BUFF[i, pLeft] != IMG_BUFF[i, pLeft - 3])//检测到边缘
+                            {
+                                //单线
+                                if (ABS(OV7725_EAGLE_M - pLeft) <= 3)
                                 {
-                                    break;
+                                    //找到左边缘
+                                    LeftBlack[i] = pLeft - 2;
+                                }
+                                //确认检测到边缘
+                                else if (IMG_BUFF[i, pLeft - 1] != IMG_BUFF[i, pLeft - 4] && IMG_BUFF[i, pLeft - 2] != IMG_BUFF[i, pLeft - 5])
+                                {
+                                    //找到左边缘
+                                    LeftBlack[i] = pLeft - 2;
+                                    //右边缘也找到
+                                    if (RightBlack[i] != OV7725_EAGLE_W - 1)
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    pLeft--;
                                 }
                             }
                             else
                             {
                                 pLeft--;
                             }
-                        }
-                        else
-                        {
-                            pLeft--;
-                        }
-                    }// if结束--′从左到右搜索到边缘
+                        }// if结束--′从左到右搜索到边缘
 
                     //′右->左搜索
-                    if (RightBlack[i] == BlackLineData[i])
-                    {
+                    if (pRight + 5 < 80)
+                        if (RightBlack[i] == BlackLineData[i])
+                        {
 
-                        if (IMG_BUFF[i, pRight] == Black)
-                        {
-                            CountBlack++;//黑点计数
-                        }
-                        else
-                        {
-                            CountWhite++;//白点计数
-                        }
-
-                        if (IMG_BUFF[i, pRight] != IMG_BUFF[i, pRight + 3])
-                        {
-                            //单线
-                            if (ABS(OV7725_EAGLE_M - pRight) <= 3)
+                            if (IMG_BUFF[i, pRight] == Black)
                             {
-                                //找到右边缘
-                                RightBlack[i] = pRight + 2;
+                                CountBlack++;//黑点计数
+                            }
+                            else
+                            {
+                                CountWhite++;//白点计数
                             }
 
-                            //确认检测到边缘
-                            if (IMG_BUFF[i, pRight + 1] != IMG_BUFF[i, pRight + 4] && IMG_BUFF[i, pRight + 2] != IMG_BUFF[i, pRight + 5])
+                            if (IMG_BUFF[i, pRight] != IMG_BUFF[i, pRight + 3])
                             {
-                                //找到右边缘
-                                RightBlack[i] = pRight + 2;
-                                //左边缘也找到
-                                if (LeftBlack[i] != 0)
+                                //单线
+                                if (ABS(OV7725_EAGLE_M - pRight) <= 3)
                                 {
-                                    break;
+                                    //找到右边缘
+                                    RightBlack[i] = pRight + 2;
+                                }
+
+                                //确认检测到边缘
+                                if (IMG_BUFF[i, pRight + 1] != IMG_BUFF[i, pRight + 4] && IMG_BUFF[i, pRight + 2] != IMG_BUFF[i, pRight + 5])
+                                {
+                                    //找到右边缘
+                                    RightBlack[i] = pRight + 2;
+                                    //左边缘也找到
+                                    if (LeftBlack[i] != 0)
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    pRight++;
                                 }
                             }
                             else
                             {
                                 pRight++;
                             }
-                        }
-                        else
-                        {
-                            pRight++;
-                        }
-                    }// if结束--′从左到右搜索到边缘
+                        }// if结束--′从左到右搜索到边缘
 
                     // 无边缘则跳出
                     if (pLeft >= pRight)
@@ -445,7 +447,7 @@ namespace img_player
             }//End else
             if (ValidExcursionCount > 1)//有便宜量
             {
-                EPerCount =(float)( ABS(Excursion) * 1.0 / ValidExcursionCount);//偏移量平均
+                EPerCount = (float)(ABS(Excursion) * 1.0 / ValidExcursionCount);//偏移量平均
             }
             else
             {
@@ -470,7 +472,7 @@ namespace img_player
         public float ke;
         int flag_cross = 0, i_left_old = 0, i_right_old = 0;
 
-         int[] ValidLine=new int[OV7725_EAGLE_H] ;//有效行计数
+        int[] ValidLine = new int[OV7725_EAGLE_H];//有效行计数
 
         struct site
         {
@@ -478,35 +480,36 @@ namespace img_player
             public int num;
         }
         site left_site, mid_site, right_site;
-       //left_site = { { 0 },0 }, mid_site = { { 0 },0 }, right_site = { { 0 },0 };
-
-        
+        //left_site = { { 0 },0 }, mid_site = { { 0 },0 }, right_site = { { 0 },0 };
 
 
 
-/***********************************************
 
-name:                      black_deal()
-function:                  deal the condition
-when only oneline
-parameter:                 mid:line
-imgb:picture
-return code:               none
 
-***********************************************/
+        /***********************************************
 
-void black_deal(int mid, int[,] imgb)
+        name:                      black_deal()
+        function:                  deal the condition
+        when only oneline
+        parameter:                 mid:line
+        imgb:picture
+        return code:               none
+
+        ***********************************************/
+
+        void black_deal(int mid, int[,] imgb)
         {
             int i = 0, j = 0, num_F = 0;
 
 
             for (i = 57 - mid; i > 0; i--)
             {
-                for (j = BlackLineData[i + 2] - 5; j <= BlackLineData[i + 2] + 5; j++)
-                {
-                    if (imgb[i , j] == 0)
-                        break;
-                }
+                if (BlackLineData[i + 2] - 5 > 0)
+                    for (j = BlackLineData[i + 2] - 5; j <= BlackLineData[i + 2] + 5; j++)
+                    {
+                        if (imgb[i, j] == 0)
+                            break;
+                    }
                 if (j > BlackLineData[i + 2] + 5)
                 {
                     break;
@@ -545,7 +548,7 @@ void black_deal(int mid, int[,] imgb)
             bool MidEnd = false;
             int MidToBlackCount = 0;
             int line1 = 0;
-            int[] jump = new int[30], jump_mid = new int[29], jump_B = new int[10];int j_save = 0;
+            int[] jump = new int[30], jump_mid = new int[29], jump_B = new int[10]; int j_save = 0;
 
             int flag_wob = 0;
 
@@ -745,6 +748,8 @@ void black_deal(int mid, int[,] imgb)
                 {
                     BlackLineData[i] = BlackLineData[i + 1] + BlackLineData[i + 1] - BlackLineData[i + 2];//进行中心线平均
                 }
+                if (BlackLineData[i] > 79) BlackLineData[i] = 79;
+                if (BlackLineData[i] < 0) BlackLineData[i] = 0;
                 if (IMG_BUFF[i, BlackLineData[i]] == Black)//中间截至
                 {
                     if (ABS(BlackLineData[i] - OV7725_EAGLE_M) <= 3)
@@ -827,7 +832,7 @@ void black_deal(int mid, int[,] imgb)
             {
                 i = 0;                // 标志位
             }
-            if (i!=0)
+            if (i != 0)
             {
                 BlackLineData[59] = i;
                 LeftBlack[59] = i - 25;
@@ -854,8 +859,8 @@ void black_deal(int mid, int[,] imgb)
         //左边缘滤波
         void LAverageFilter()
         {
-             int i = 0;
-             int j = 0;
+            int i = 0;
+            int j = 0;
             int sum = 0;
             for (i = OV7725_EAGLE_H - 1; i > OV7725_EAGLE_H - (LeftStableNumbers - 5); i--)//有效行后5行去掉进行滤波
             {
@@ -874,7 +879,7 @@ void black_deal(int mid, int[,] imgb)
         void RAverageFilter()
         {
             uint i = 0;
-            uint  j = 0;
+            uint j = 0;
             int sum = 0;
             for (i = OV7725_EAGLE_H - 1; i > OV7725_EAGLE_H - (RightStableNumbers - 5); i--)
             {
@@ -908,7 +913,7 @@ void black_deal(int mid, int[,] imgb)
             P0_X = BlackLineData[OV7725_EAGLE_H - 1];
             P0_Y = OV7725_EAGLE_H - 1;
 
-            Mid_K1 =(float)( ABS(P0_X - P1_X) * 1.0 / ABS(P0_Y - P1_Y));//斜率1
+            Mid_K1 = (float)(ABS(P0_X - P1_X) * 1.0 / ABS(P0_Y - P1_Y));//斜率1
             Mid_K2 = (float)(ABS(P0_X - P2_X) * 1.0 / ABS(P0_Y - P2_Y));//斜率2
 
         }
@@ -1001,10 +1006,12 @@ void black_deal(int mid, int[,] imgb)
 
             for (i = OV7725_EAGLE_H - (StableNumbers - 10); i > 0; i--)
             {
+
                 BlackLineData[i] = BlackLineData[i + 1] + CompensateData;
 
                 CompensateCount++;
-
+                if (BlackLineData[i] > 79) BlackLineData[i] = 79;
+                if (BlackLineData[i] < 0) BlackLineData[i] = 0;
                 if (IMG_BUFF[i, BlackLineData[i]] == Black || BlackLineData[i] < 2 || BlackLineData[i] > OV7725_EAGLE_W - 2)
                 {
                     break;
@@ -1040,7 +1047,7 @@ void black_deal(int mid, int[,] imgb)
             }
         }
 
-        int[] TemMidLineData=new int[OV7725_EAGLE_H];//提取黑线值数据
+        int[] TemMidLineData = new int[OV7725_EAGLE_H];//提取黑线值数据
 
         void StoreMidLine()
         {
@@ -1099,8 +1106,8 @@ void black_deal(int mid, int[,] imgb)
         void GetMidLineVariance()
         {
             int i = 0;
-           int iCount = 0;
-           int Black_Sum = 0;
+            int iCount = 0;
+            int Black_Sum = 0;
             float aver = 0.0f;
             int end = OV7725_EAGLE_H - (StableNumbers - 5);
 
@@ -1127,7 +1134,7 @@ void black_deal(int mid, int[,] imgb)
         ******************************************************************************/
         void GetSpecialError()
         {
-           int i = 0;
+            int i = 0;
             int end = OV7725_EAGLE_H - StableNumbers;
 
             MidLineExcursion = 0;
@@ -1157,14 +1164,14 @@ void black_deal(int mid, int[,] imgb)
         ******************************************************************************/
         int g_BasePos = OV7725_EAGLE_W / 2 - 1;
         int CrossingStable = 0;
-        int[] ValidLineR=new int[OV7725_EAGLE_H] ; //十字右边行有效标志数组
-        int[] ValidLineL=new int[OV7725_EAGLE_H] ;//十字左边行有效标志数组
+        int[] ValidLineR = new int[OV7725_EAGLE_H]; //十字右边行有效标志数组
+        int[] ValidLineL = new int[OV7725_EAGLE_H];//十字左边行有效标志数组
         int NoValidLMax = 0;//十字交叉左边连续丢线计数
         int NoValidRMax = 0;//十字交叉右边连续丢线计数
 
         void GetCrossingMidLine()
         {
-           int i = 0, j = 0;
+            int i = 0, j = 0;
             //指针
             int pLeft = OV7725_EAGLE_W / 2, pRight = OV7725_EAGLE_W / 2;
             bool bFoundLeft = false;
@@ -1397,7 +1404,7 @@ void black_deal(int mid, int[,] imgb)
                             temRight = 0;
                             bFoundFlag = false;
                             //确定新的搜索基点
-                            for (temi = OV7725_EAGLE_W - 1; temi > 1; temi--)
+                            for (temi = OV7725_EAGLE_W - 1; temi > 4; temi--)
                             {
                                 if (IMG_BUFF[i, temi] == White && IMG_BUFF[i, temi - 1] == White && temRight == 0)
                                 {
@@ -1467,7 +1474,7 @@ void black_deal(int mid, int[,] imgb)
 
         void SCProcessing()
         {
-           int i = 0;
+            int i = 0;
             int startPos = 0, endPos = 0, temCount = 0, countMax = 0, temPos = 0;
             int ProcessFlag = 0;
 
@@ -1559,7 +1566,7 @@ void black_deal(int mid, int[,] imgb)
             endPos = 0;
             temPos = TripPointPos[0] - 1;
             startPos = temPos;
-            for (i = 0; i < TripPointCount; i++)
+            for (i = 1; i < TripPointCount; i++)
             {
                 if (TripPointPos[i] - TripPointPos[i - 1] < 3)
                 {
@@ -1585,7 +1592,7 @@ void black_deal(int mid, int[,] imgb)
                 ProcessFlag = 1;
 
             }
-            if (0==ProcessFlag)
+            if (0 == ProcessFlag)
             {
                 IsCrossing = false;
             }
@@ -1678,42 +1685,14 @@ void black_deal(int mid, int[,] imgb)
                 }
                 Count1 = 0;
                 Count2 = 0;
-                if (LeftBlack[i] - LeftBlack[i + 1] > 0)
-                {
-                    Count1++;
-                    i++;
-                    for (; i < iEnd; i++)
-                    {
-                        if (LeftBlack[i] - LeftBlack[i + 1] >= 0)
-                        {
-                            Count1++;
-                            if (Count2 != 0)
-                            {
-                                Count1 = 1;
-                                Count2 = 0;
-                            }
-                        }
-                        else if (LeftBlack[i] - LeftBlack[i + 1] < 0)
-                        {
-                            if (Count1 > 2 && TripPos == 0)
-                            {
-                                TripPos = i;
-                            }
-                            Count2++;
-                        }
-                    }
-                    if (Count1 > 2 && Count2 > 2)
-                    {
-                        bFoundTripPoint = 1;
-                        LCrossingTripPos = TripPos;//左边缘跳变找到
-                    }
-                    else
+                if (i > 0 && i < 59)
+                    if (LeftBlack[i] - LeftBlack[i + 1] > 0)
                     {
                         Count1++;
                         i++;
                         for (; i < iEnd; i++)
                         {
-                            if (LeftBlack[i] - LeftBlack[i + 1] < 0)
+                            if (LeftBlack[i] - LeftBlack[i + 1] >= 0)
                             {
                                 Count1++;
                                 if (Count2 != 0)
@@ -1722,7 +1701,7 @@ void black_deal(int mid, int[,] imgb)
                                     Count2 = 0;
                                 }
                             }
-                            else if (LeftBlack[i] - LeftBlack[i + 1] > 0)
+                            else if (LeftBlack[i] - LeftBlack[i + 1] < 0)
                             {
                                 if (Count1 > 2 && TripPos == 0)
                                 {
@@ -1736,26 +1715,13 @@ void black_deal(int mid, int[,] imgb)
                             bFoundTripPoint = 1;
                             LCrossingTripPos = TripPos;//左边缘跳变找到
                         }
-                    }
-
-                    //左倾找右边缘跳变
-                    if (iCount > 30 && g_Derict == L_BlackEnd)
-                    {
-                        i = iStart;
-                        Count1 = 0;
-                        Count2 = 0;
-                        while (i < iEnd && RightBlack[i] - RightBlack[i + 1] == 0)
-                        {
-                            i++;
-                        }
-                        if (RightBlack[i] - RightBlack[i + 1] > 0)
+                        else
                         {
                             Count1++;
                             i++;
                             for (; i < iEnd; i++)
                             {
-
-                                if (RightBlack[i] - RightBlack[i + 1] > 0)
+                                if (LeftBlack[i] - LeftBlack[i + 1] < 0)
                                 {
                                     Count1++;
                                     if (Count2 != 0)
@@ -1764,7 +1730,7 @@ void black_deal(int mid, int[,] imgb)
                                         Count2 = 0;
                                     }
                                 }
-                                else if (RightBlack[i] - RightBlack[i + 1] < 0)
+                                else if (LeftBlack[i] - LeftBlack[i + 1] > 0)
                                 {
                                     if (Count1 > 2 && TripPos == 0)
                                     {
@@ -1776,42 +1742,84 @@ void black_deal(int mid, int[,] imgb)
                             if (Count1 > 2 && Count2 > 2)
                             {
                                 bFoundTripPoint = 1;
-                                RCrossingTripPos = TripPos;//右边缘跳变找到
+                                LCrossingTripPos = TripPos;//左边缘跳变找到
                             }
                         }
-                        else
+
+                        //左倾找右边缘跳变
+                        if (iCount > 30 && g_Derict == L_BlackEnd)
                         {
-                            Count1++;
-                            i++;
-                            for (; i < iEnd; i++)
+                            i = iStart;
+                            Count1 = 0;
+                            Count2 = 0;
+                            while (i < iEnd && RightBlack[i] - RightBlack[i + 1] == 0)
                             {
-                                if (RightBlack[i] - RightBlack[i + 1] < 0)
+                                i++;
+                            }
+                            if (RightBlack[i] - RightBlack[i + 1] > 0)
+                            {
+                                Count1++;
+                                i++;
+                                for (; i < iEnd; i++)
                                 {
-                                    Count1++;
-                                    if (Count2 != 0)
+
+                                    if (RightBlack[i] - RightBlack[i + 1] > 0)
                                     {
-                                        Count1 = 1;
-                                        Count2 = 0;
+                                        Count1++;
+                                        if (Count2 != 0)
+                                        {
+                                            Count1 = 1;
+                                            Count2 = 0;
+                                        }
+                                    }
+                                    else if (RightBlack[i] - RightBlack[i + 1] < 0)
+                                    {
+                                        if (Count1 > 2 && TripPos == 0)
+                                        {
+                                            TripPos = i;
+                                        }
+                                        Count2++;
                                     }
                                 }
-                                else if (RightBlack[i] - RightBlack[i + 1] > 0)
+                                if (Count1 > 2 && Count2 > 2)
                                 {
-                                    if (Count1 > 2 && TripPos == 0)
-                                    {
-
-                                    }
-                                    Count2++;
+                                    bFoundTripPoint = 1;
+                                    RCrossingTripPos = TripPos;//右边缘跳变找到
                                 }
                             }
-                            if (Count1 > 2 && Count2 > 2)
+                            else
                             {
-                                bFoundTripPoint = 1;
-                                RCrossingTripPos = TripPos;//右边缘跳变找到
+                                Count1++;
+                                i++;
+                                for (; i < iEnd; i++)
+                                {
+                                    if (RightBlack[i] - RightBlack[i + 1] < 0)
+                                    {
+                                        Count1++;
+                                        if (Count2 != 0)
+                                        {
+                                            Count1 = 1;
+                                            Count2 = 0;
+                                        }
+                                    }
+                                    else if (RightBlack[i] - RightBlack[i + 1] > 0)
+                                    {
+                                        if (Count1 > 2 && TripPos == 0)
+                                        {
+
+                                        }
+                                        Count2++;
+                                    }
+                                }
+                                if (Count1 > 2 && Count2 > 2)
+                                {
+                                    bFoundTripPoint = 1;
+                                    RCrossingTripPos = TripPos;//右边缘跳变找到
+                                }
                             }
                         }
                     }
-                }
-                if (bFoundTripPoint!=0)
+                if (bFoundTripPoint != 0)
                 {
                     GetCrossingMidLine();//取十字边缘线
                     if (g_Derict == L_BlackEnd)//左倾
@@ -1918,14 +1926,18 @@ void black_deal(int mid, int[,] imgb)
                     else if (g_Derict == R_BlackEnd)
                     {
                         pos = 20;
-                        while (ValidLineL[pos] == 0)
-                        {
-                            pos++;
-                        }
-                        while (ValidLineL[pos] == 1)
-                        {
-                            pos++;
-                        }
+                        if (pos < 60)
+                            while (ValidLineL[pos] == 0)
+                            {
+                                pos++;
+                                if (pos == 59) break;
+                            }
+                        if (pos < 60)
+                            while (ValidLineL[pos] == 1)
+                            {
+                                pos++;
+                                if (pos == 59) break;
+                            }
                         startPos = pos - 2;
                         pos += 8;
                         while (pos < OV7725_EAGLE_H - 1 && (ValidLineL[pos] == 0 || LeftBlack[pos] < 3))
@@ -2061,8 +2073,8 @@ void black_deal(int mid, int[,] imgb)
         int StraightToBendCount = 0;
         int LastRoadType = 0;
         int RoadType = -1;
-        int[]  HistoryRoadType=new int[4] ;
-        int[] RoadTypeData2=new int[Size2];
+        int[] HistoryRoadType = new int[4];
+        int[] RoadTypeData2 = new int[Size2];
         int ElementCount2 = 0;
         int g_Head = 0, g_Rear = 0;
 
@@ -2161,7 +2173,7 @@ void black_deal(int mid, int[,] imgb)
         void HistoryRTProccess()
         {
 
-            if ((StandardRoadType!=0) && (RoadType == 0 || RoadType == 1))
+            if ((StandardRoadType != 0) && (RoadType == 0 || RoadType == 1))
             {
                 //存入循环队列
                 RoadTypeData2[Rear2] = RoadType;
@@ -2249,7 +2261,7 @@ void black_deal(int mid, int[,] imgb)
             }
             RoadType = temRoadType;//赛道判断成功
             HistoryRTProccess();//历史赛道信息
-            if (IsStraightToBend()!=0)//直道入弯判断
+            if (IsStraightToBend() != 0)//直道入弯判断
             {
                 RoadType = 103;
             }
@@ -2287,7 +2299,7 @@ void black_deal(int mid, int[,] imgb)
             return TemError;
         }
 
-        int[] LineWeight=new int[OV7725_EAGLE_H]  ;
+        int[] LineWeight = new int[OV7725_EAGLE_H];
 
         float GetSteerError2(int start, int end, float midpos)
         {
@@ -2346,7 +2358,7 @@ void black_deal(int mid, int[,] imgb)
         float LastError = 0.0f;
         float k = 1.0f;
 
-       // extern float ke = 0.0f;
+        // extern float ke = 0.0f;
 
         void DirectionCtrol()
         {
@@ -2456,7 +2468,7 @@ void black_deal(int mid, int[,] imgb)
                 StartPos = EndPos - 2;
                 EndPos = EndPos + 2;
             }
-            if (IsStartLine!=0)
+            if (IsStartLine != 0)
             {
                 StartPos = OV7725_EAGLE_H - 10;
                 EndPos = OV7725_EAGLE_H - 1;
@@ -2464,7 +2476,7 @@ void black_deal(int mid, int[,] imgb)
             }
 
 
-            if (CrossingBegin!=0)
+            if (CrossingBegin != 0)
             {
                 CtrlWeight = 10;
             }
@@ -2525,7 +2537,7 @@ void black_deal(int mid, int[,] imgb)
                 return;
             }
 
-            if (CrossingBegin!=0)
+            if (CrossingBegin != 0)
             {
                 CrossingCount++;//过十字标志进行累加
 
