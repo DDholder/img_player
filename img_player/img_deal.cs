@@ -2060,7 +2060,7 @@ void black_deal(int mid, int[,] imgb)
         int StandardRoadType = 1;
         int StraightToBendCount = 0;
         int LastRoadType = 0;
-        int RoadType = -1;
+        public int RoadType = -1;
         int[]  HistoryRoadType=new int[4] ;
         int[] RoadTypeData2=new int[Size2];
         int ElementCount2 = 0;
