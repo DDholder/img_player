@@ -62,7 +62,7 @@
             this.pictureBox1.Image = global::img_player.Properties.Resources.无标题;
             this.pictureBox1.Location = new System.Drawing.Point(12, 56);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(340, 244);
+            this.pictureBox1.Size = new System.Drawing.Size(320, 228);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 

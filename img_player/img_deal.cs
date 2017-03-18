@@ -178,9 +178,9 @@ namespace img_player
         /******************************************************************************
         获取偏移量线
         ******************************************************************************/
-       public int[] LeftBlack = new int[OV7725_EAGLE_H];
-       public int[] RightBlack = new int[OV7725_EAGLE_H];
-       public int[] BlackLineData = new int[OV7725_EAGLE_H];
+        public int[] LeftBlack = new int[OV7725_EAGLE_H];
+        public int[] RightBlack = new int[OV7725_EAGLE_H];
+        public int[] BlackLineData = new int[OV7725_EAGLE_H];
 
         byte FirstImage = 0;
         byte BlackRow = 0;
@@ -507,8 +507,9 @@ namespace img_player
                 if (BlackLineData[i + 2] - 5 > 0)
                     for (j = BlackLineData[i + 2] - 5; j <= BlackLineData[i + 2] + 5; j++)
                     {
-                        if (imgb[i, j] == 0)
-                            break;
+                        if (j < 80 && j >= 0)
+                            if (imgb[i, j] == 0)
+                                break;
                     }
                 if (j > BlackLineData[i + 2] + 5)
                 {
@@ -871,7 +872,8 @@ namespace img_player
                 }
                 LeftBlack[i] = sum / 5;//进行平均
             }
-            P1_X = LeftBlack[OV7725_EAGLE_H - (LeftStableNumbers - 6)];//最后一个有效点的列数
+            if (OV7725_EAGLE_H - (LeftStableNumbers - 6) < 60)
+                P1_X = LeftBlack[OV7725_EAGLE_H - (LeftStableNumbers - 6)];//最后一个有效点的列数
             P1_Y = OV7725_EAGLE_H - (LeftStableNumbers - 6);//最后一个有效点的行数
         }
 
@@ -890,6 +892,7 @@ namespace img_player
                 }
                 RightBlack[i] = sum / 5;
             }
+            if(OV7725_EAGLE_H - (RightStableNumbers - 6)<60&& OV7725_EAGLE_H - (RightStableNumbers - 6)>0)
             P2_X = RightBlack[OV7725_EAGLE_H - (RightStableNumbers - 6)];
             P2_Y = OV7725_EAGLE_H - (RightStableNumbers - 6);
 
@@ -944,14 +947,17 @@ namespace img_player
             {
                 for (i = OV7725_EAGLE_H - (MinStable - 5); i > OV7725_EAGLE_H - (StableNumbers - 5); i--)//滤掉的5行数据在处理
                 {
-                    BlackLineData[i] = BlackLineData[i + 1] + BlackLineData[i + 1] - BlackLineData[i + 2];
-                    if (BlackLineData[i] > OV7725_EAGLE_W - 1)
+                    if (i < 58)
                     {
-                        BlackLineData[i] = OV7725_EAGLE_W - 1;
-                    }
-                    else if (BlackLineData[i] < 0)
-                    {
-                        BlackLineData[i] = 0;
+                        BlackLineData[i] = BlackLineData[i + 1] + BlackLineData[i + 1] - BlackLineData[i + 2];
+                        if (BlackLineData[i] > OV7725_EAGLE_W - 1)
+                        {
+                            BlackLineData[i] = OV7725_EAGLE_W - 1;
+                        }
+                        else if (BlackLineData[i] < 0)
+                        {
+                            BlackLineData[i] = 0;
+                        }
                     }
                 }
             }
@@ -1983,7 +1989,7 @@ namespace img_player
             {
                 BlackLineData[i] = LeftBlack[i] + (RightBlack[i] - LeftBlack[i]) / 2;
                 if (BlackLineData[i] > 79) BlackLineData[i] = 79;
-                if (BlackLineData[i] <0) BlackLineData[i] = 0;
+                if (BlackLineData[i] < 0) BlackLineData[i] = 0;
                 StableNumbers2++;//十字中心线稳定行计数增加
 
                 if (BlackLineData[i] < 4 || BlackLineData[i] > OV7725_EAGLE_W - 4)
