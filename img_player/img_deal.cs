@@ -1936,13 +1936,13 @@ namespace img_player
                             while (ValidLineL[pos] == 0)
                             {
                                 pos++;
-                                if (pos == 59) break;
+                                if (pos >= 59) break;
                             }
                         if (pos < 60)
                             while (ValidLineL[pos] == 1)
                             {
                                 pos++;
-                                if (pos == 59) break;
+                                if (pos >= 59) break;
                             }
                         startPos = pos - 2;
                         pos += 8;
@@ -2339,7 +2339,7 @@ namespace img_player
         volatile int IsStartLine = 0;
         int CrossingBegin = 0;
         int CrossingCount = 0;
-
+        
         int Foresight = 15;//定义前瞻量
         int StraightFS = 45;
         int SmallSFS = 45;
