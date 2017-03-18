@@ -73,6 +73,28 @@ namespace img_player
                 img_Handler.imgbuff = fps[num].img;
                 img_Handler.image_deal();
                 textBox1.Text = img_Handler.ke.ToString();
+                //显示赛道类型
+                switch (img_Handler.RoadType)
+                {
+                    case 0:
+                        textBox2.Text = "直道";
+                        break;
+                    case 1:
+                        textBox2.Text = "小S弯";
+                        break;
+                    case 2:
+                        textBox2.Text = "大S弯";
+                        break;
+                    case 3:
+                        textBox2.Text = "急弯";
+                        break;
+                    case 103:
+                        textBox2.Text = "直-》弯";
+                        break;
+                    default:
+                        break;
+
+                }
             }
             Changemap(fps[num].img);
             Display(map);
@@ -274,6 +296,11 @@ namespace img_player
         private void Form1_Load(object sender, EventArgs e)
         {
             comboBox1.SelectedIndex = 0;
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
 
         void Readpic(byte[] str, int n)
