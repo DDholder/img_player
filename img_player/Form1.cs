@@ -60,7 +60,8 @@ namespace img_player
                     play(retime);
                     retime++;
                 }
-            }
+            } 
+
         }
         void play(int num)
         {
