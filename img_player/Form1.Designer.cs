@@ -41,14 +41,20 @@
             this.play_bar = new System.Windows.Forms.TrackBar();
             this.Open = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.ListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.打开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.play_pro = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.imgDealEnable = new System.Windows.Forms.CheckBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.play_bar)).BeginInit();
+            this.ListMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -76,7 +82,7 @@
             this.PgDn.Name = "PgDn";
             this.PgDn.Size = new System.Drawing.Size(68, 23);
             this.PgDn.TabIndex = 2;
-            this.PgDn.Text = "PdDn";
+            this.PgDn.Text = "PgDn";
             this.PgDn.UseVisualStyleBackColor = true;
             this.PgDn.Click += new System.EventHandler(this.PgDn_Click);
             // 
@@ -98,6 +104,7 @@
             this.Fast.TabIndex = 4;
             this.Fast.Text = ">>";
             this.Fast.UseVisualStyleBackColor = true;
+            this.Fast.Click += new System.EventHandler(this.Fast_Click);
             // 
             // Slow
             // 
@@ -107,6 +114,7 @@
             this.Slow.TabIndex = 5;
             this.Slow.Text = "<<";
             this.Slow.UseVisualStyleBackColor = true;
+            this.Slow.Click += new System.EventHandler(this.Slow_Click);
             // 
             // menuStrip1
             // 
@@ -154,12 +162,36 @@
             // 
             // listBox1
             // 
+            this.listBox1.ContextMenuStrip = this.ListMenuStrip1;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 15;
             this.listBox1.Location = new System.Drawing.Point(515, 56);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(167, 244);
             this.listBox1.TabIndex = 10;
+            // 
+            // ListMenuStrip1
+            // 
+            this.ListMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.ListMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.打开ToolStripMenuItem,
+            this.删除ToolStripMenuItem});
+            this.ListMenuStrip1.Name = "ListMenuStrip1";
+            this.ListMenuStrip1.Size = new System.Drawing.Size(115, 56);
+            // 
+            // 打开ToolStripMenuItem
+            // 
+            this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
+            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.打开ToolStripMenuItem.Text = "打开";
+            this.打开ToolStripMenuItem.Click += new System.EventHandler(this.打开ToolStripMenuItem_Click);
+            // 
+            // 删除ToolStripMenuItem
+            // 
+            this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.删除ToolStripMenuItem.Text = "删除";
+            this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
             // timer1
             // 
@@ -188,9 +220,9 @@
             this.imgDealEnable.AutoSize = true;
             this.imgDealEnable.Location = new System.Drawing.Point(407, 404);
             this.imgDealEnable.Name = "imgDealEnable";
-            this.imgDealEnable.Size = new System.Drawing.Size(101, 19);
+            this.imgDealEnable.Size = new System.Drawing.Size(89, 19);
             this.imgDealEnable.TabIndex = 13;
-            this.imgDealEnable.Text = "checkBox1";
+            this.imgDealEnable.Text = "处理图像";
             this.imgDealEnable.UseVisualStyleBackColor = true;
             // 
             // textBox1
@@ -201,11 +233,33 @@
             this.textBox1.Size = new System.Drawing.Size(100, 25);
             this.textBox1.TabIndex = 14;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "本地",
+            "串口"});
+            this.comboBox1.Location = new System.Drawing.Point(515, 359);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 23);
+            this.comboBox1.TabIndex = 15;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(429, 367);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 15);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "数据源";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(694, 439);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.imgDealEnable);
             this.Controls.Add(this.label1);
@@ -223,10 +277,12 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.play_bar)).EndInit();
+            this.ListMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,6 +307,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox imgDealEnable;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ContextMenuStrip ListMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 打开ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

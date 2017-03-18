@@ -178,9 +178,9 @@ namespace img_player
         /******************************************************************************
         获取偏移量线
         ******************************************************************************/
-        int[] LeftBlack = new int[OV7725_EAGLE_H];
-        int[] RightBlack = new int[OV7725_EAGLE_H];
-        int[] BlackLineData = new int[OV7725_EAGLE_H];
+       public int[] LeftBlack = new int[OV7725_EAGLE_H];
+       public int[] RightBlack = new int[OV7725_EAGLE_H];
+       public int[] BlackLineData = new int[OV7725_EAGLE_H];
 
         byte FirstImage = 0;
         byte BlackRow = 0;
@@ -1982,7 +1982,8 @@ namespace img_player
             for (i = OV7725_EAGLE_H - 1; i >= 0 && !MidEnd; i--)
             {
                 BlackLineData[i] = LeftBlack[i] + (RightBlack[i] - LeftBlack[i]) / 2;
-
+                if (BlackLineData[i] > 79) BlackLineData[i] = 79;
+                if (BlackLineData[i] <0) BlackLineData[i] = 0;
                 StableNumbers2++;//十字中心线稳定行计数增加
 
                 if (BlackLineData[i] < 4 || BlackLineData[i] > OV7725_EAGLE_W - 4)
@@ -1994,6 +1995,8 @@ namespace img_player
                 {
                     BlackLineData[i] = BlackLineData[i + 1] + BlackLineData[i + 1] - BlackLineData[i + 2];//中心线平均
                 }
+                if (BlackLineData[i] > 79) BlackLineData[i] = 79;
+                if (BlackLineData[i] < 0) BlackLineData[i] = 0;
                 if (IMG_BUFF[i, BlackLineData[i]] == Black)
                 {
                     ////////////////////////////////////////////////////////////////////////////////////////

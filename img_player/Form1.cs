@@ -21,7 +21,7 @@ namespace img_player
         {
             InitializeComponent();
         }
-        points[] fps = new points[6000];//6000帧数据
+        public points[] fps = new points[6000];//6000帧数据
         byte[] buff = new byte[600];//串口读出的图像
         int[,] map = new int[80, 60];//解压后图像
         public int time = 0, retime = 0;//记录时间和回放时间
@@ -30,6 +30,7 @@ namespace img_player
         string[] filenames = new string[100];
         bool filestrflag = false;
         img_deal img_Handler = new img_deal();
+        public bool bConnect = false;
         private void Play_Pause_Click(object sender, EventArgs e)
         {
             if (timer1.Enabled)
@@ -48,7 +49,11 @@ namespace img_player
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (state == "play")
+            if (bConnect&&comboBox1.Text=="串口")
+            {
+                play(0);
+            }
+            else if (state == "play"&&comboBox1.Text=="本地")
             {
                 if (retime < time)
                 {
@@ -111,6 +116,15 @@ namespace img_player
                         g.FillRectangle(Brushes.White, rect);
                     }
                 }
+                if (imgDealEnable.Checked)
+                {
+                    Rectangle rect1 = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
+                    g.FillRectangle(Brushes.Green, rect1);
+                    rect1 = new Rectangle(img_Handler.RightBlack[i] * 3, i * 3, 3, 3);
+                    g.FillRectangle(Brushes.Red, rect1);
+                    rect1 = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
+                    g.FillRectangle(Brushes.Yellow, rect1);
+                }
             }
         }
         private void 添加文件ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -126,7 +140,9 @@ namespace img_player
                     filenames[listBox1.Items.Count] = opdialog.FileNames[i];
                     listBox1.Items.Add(opdialog.FileNames[i].Substring(opdialog.FileNames[i].LastIndexOf("\\") + 1));
                 }
+                listBox1.SelectedIndex = 0;
             }
+
         }
 
         private void Open_Click(object sender, EventArgs e)
@@ -190,7 +206,7 @@ namespace img_player
         private void play_bar_Scroll(object sender, EventArgs e)
         {
             retime = play_bar.Value;
-            if ( retime < time)
+            if (retime < time)
             {
                 play_pro.Text = retime.ToString() + "/" + time.ToString();
                 play(retime);
@@ -199,7 +215,7 @@ namespace img_player
 
         private void PgUp_Click(object sender, EventArgs e)
         {
-            if (  retime > 0)
+            if (retime > 0)
             {
                 retime--;
                 play(retime);
@@ -208,11 +224,55 @@ namespace img_player
 
         private void PgDn_Click(object sender, EventArgs e)
         {
-            if ( retime < time)
+            if (retime < time)
             {
                 retime++;
                 play(retime);
             }
+        }
+
+        private void Slow_Click(object sender, EventArgs e)
+        {
+            if (timer1.Interval < 500)
+                timer1.Interval += 50;
+        }
+
+        private void Fast_Click(object sender, EventArgs e)
+        {
+            if (timer1.Interval > 50)
+                timer1.Interval -= 50;
+        }
+
+        private void 打开ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int n = listBox1.SelectedIndex;
+            // System.Diagnostics.Process.Start(filenames[n]);
+            imgdatainit();
+            try
+            {
+                FileStream file = new FileStream(filenames[n], FileMode.Open);
+                byte[] readByte = new byte[file.Length];
+                file.Seek(0, SeekOrigin.Begin);
+                file.Read(readByte, 0, readByte.Length); //byData传进来的字节数组,用以接受FileStream对象中的数据,第2个参数是字节数组中开始写入数据的位置,它通常是0,表示从数组的开端文件中向数组写数据,最后一个参数规定从文件读多少字符.
+                Read_imgFile(readByte, readByte.Length);
+                file.Close();
+                play(0);
+            }
+            catch (IOException err)
+            {
+                Console.WriteLine(err.ToString());
+            }
+        }
+
+        private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //int n = listBox1.SelectedIndex;
+            listBox1.Items.Remove(listBox1.SelectedItem);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            comboBox1.SelectedIndex = 0;
         }
 
         void Readpic(byte[] str, int n)
