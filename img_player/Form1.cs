@@ -58,7 +58,7 @@ namespace img_player
                 if (retime < time)
                 {
                     play(retime);
-                    retime++;
+                    retime++; 
                 }
             } 
 
