@@ -49,19 +49,18 @@ namespace img_player
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (bConnect&&comboBox1.Text=="串口")
+            if (bConnect && comboBox1.Text == "串口")
             {
                 play(0);
             }
-            else if (state == "play"&&comboBox1.Text=="本地")
+            else if (state == "play" && comboBox1.Text == "本地")
             {
                 if (retime < time)
                 {
                     play(retime);
-                    retime++; 
+                    retime++;
                 }
-            } 
-
+            }
         }
         void play(int num)
         {
@@ -289,7 +288,11 @@ namespace img_player
 
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //int n = listBox1.SelectedIndex;
+            int n = listBox1.SelectedIndex;
+            for (int i = n; i < listBox1.Items.Count-1; i++)
+            {
+                filenames[i] = filenames[i + 1];
+            }
             listBox1.Items.Remove(listBox1.SelectedItem);
         }
 
