@@ -19,6 +19,11 @@ namespace img_player
     {
         public Form1()
         {
+            this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint |
+                          ControlStyles.AllPaintingInWmPaint,
+                          true);//开启双缓冲
+
+            this.UpdateStyles();
             InitializeComponent();
         }
         public points[] fps = new points[6000];//6000帧数据
@@ -96,7 +101,9 @@ namespace img_player
                 }
             }
             Changemap(fps[num].img);
-            Display(map);
+            //Display(map);
+            //Invalidate();
+            pictureBox1.Refresh();
         }
         void Changemap(int[] imgbuff)
         {
@@ -121,32 +128,55 @@ namespace img_player
         }
         void Display(int[,] image_buff)
         {
+            Rectangle rect;
+            Color col = Color.FromArgb(50, 0, 0, 0);
+            Brush bsh = new SolidBrush(col);
             Graphics g = pictureBox1.CreateGraphics();
-
             for (int i = 0; i < 60; i++)
             {
                 for (int j = 0; j < 80; j++)
                 {
-                    if (image_buff[j, i] == 1)
+
+                    if (image_buff[j, i] == 1&&j!=19 && j != 39 && j != 59)
                     {
-                        Rectangle rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        rect = new Rectangle(j * 3, i * 3, 3, 3);
                         g.FillRectangle(Brushes.Black, rect);
                     }
-                    else
+                    else  if( j != 19 && j != 39 && j != 59)
                     {
-                        Rectangle rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        rect = new Rectangle(j * 3, i * 3, 3, 3);
                         g.FillRectangle(Brushes.White, rect);
                     }
+
                 }
                 if (imgDealEnable.Checked)
                 {
-                    Rectangle rect1 = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
-                    g.FillRectangle(Brushes.Green, rect1);
-                    rect1 = new Rectangle(img_Handler.RightBlack[i] * 3, i * 3, 3, 3);
-                    g.FillRectangle(Brushes.Red, rect1);
-                    rect1 = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
-                    g.FillRectangle(Brushes.Yellow, rect1);
+                    rect = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
+                    g.FillRectangle(Brushes.Green, rect);
+                    rect = new Rectangle(img_Handler.RightBlack[i] * 3, i * 3, 3, 3);
+                    g.FillRectangle(Brushes.Red, rect);
+                    rect = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
+                    g.FillRectangle(Brushes.Yellow, rect);
                 }
+            }
+            label4.Text = img_Handler.dir;
+            for (int i = 0; i < 60; i++)
+            {
+                rect = new Rectangle(19 * 3 , i * 3, 3, 3);
+                g.FillRectangle(Brushes.White, rect);
+                rect = new Rectangle(39 * 3 , i * 3, 3, 3);
+                g.FillRectangle(Brushes.White, rect);
+                rect = new Rectangle(59 * 3 , i * 3, 3, 3);
+                g.FillRectangle(Brushes.White, rect);
+
+
+
+                rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
+                g.FillRectangle(bsh, rect);
+                rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
+                g.FillRectangle(bsh, rect);
+                rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
+                g.FillRectangle(bsh, rect);
             }
         }
         private void 添加文件ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -289,7 +319,7 @@ namespace img_player
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int n = listBox1.SelectedIndex;
-            for (int i = n; i < listBox1.Items.Count-1; i++)
+            for (int i = n; i < listBox1.Items.Count - 1; i++)
             {
                 filenames[i] = filenames[i + 1];
             }
@@ -304,6 +334,54 @@ namespace img_player
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            img_Handler.breakflag = true;
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            Rectangle rect;
+            Color col = Color.FromArgb(50, 0, 0, 0);
+            Brush bsh = new SolidBrush(col);
+            for (int i = 0; i < 60; i++)
+            {
+                for (int j = 0; j < 80; j++)
+                {
+
+                    if (map[j, i] == 1 && j != 19 && j != 39 && j != 59)
+                    {
+                        rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        e.Graphics.FillRectangle(Brushes.Black, rect);
+                    }
+                    else if (j != 19 && j != 39 && j != 59)
+                    {
+                        rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        e.Graphics.FillRectangle(Brushes.White, rect);
+                    }
+
+                }
+                if (imgDealEnable.Checked)
+                {
+                    rect = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
+                    e.Graphics.FillRectangle(Brushes.Green, rect);
+                    rect = new Rectangle(img_Handler.RightBlack[i] * 3, i * 3, 3, 3);
+                    e.Graphics.FillRectangle(Brushes.Red, rect);
+                    rect = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
+                    e.Graphics.FillRectangle(Brushes.Yellow, rect);
+                }
+            }
+            label4.Text =img_Handler.dir;
+            for (int i = 0; i < 60; i++)
+            {
+                rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
+                e.Graphics.FillRectangle(bsh, rect);
+                rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
+                e.Graphics.FillRectangle(bsh, rect);
+                rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
+                e.Graphics.FillRectangle(bsh, rect);
+            }
         }
 
         void Readpic(byte[] str, int n)

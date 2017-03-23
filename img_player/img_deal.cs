@@ -26,8 +26,13 @@ namespace img_player
         public int[] imgbuff = new int[600];      //定义存储接收图像的数组
         int[] img = new int[4800];     //解压后数组
         int[,] IMG_BUFF = new int[60, 80];
+        public bool breakflag = false;
         public void image_deal()
         {
+            if (breakflag)
+            {
+                ;
+            }
             //camera_get_img();                       //获取图像
             img_extract(img, imgbuff, 600); //解压图像											
             int i, j, k = 0;
@@ -99,6 +104,7 @@ namespace img_player
         {
             return x > 0 ? x : -x;
         }
+        public string dir;
         void GetBlackEndParam()//获取黑线截至行
         {
             LEndFlag = false;//左截至标志
@@ -149,28 +155,33 @@ namespace img_player
             if (BlackEndMax == BlackEndL)
             {
                 g_Derict = L_BlackEnd;//左
+                dir = "左";
             }
             else if (BlackEndMax == BlackEndR)
             {
                 g_Derict = R_BlackEnd;//右
+                dir = "右";
             }
             else if (BlackEndMax == BlackEndM)
             {
-                if (ABS(BlackEndM - BlackEndR) <= 2 && ABS(BlackEndM - BlackEndL) <= 2)
-                {
-                    g_Derict = Angle;//直角
-                }
-                else if (ABS(BlackEndL - BlackEndR) < 5)          ///////////////////////
+                //if (ABS(BlackEndM - BlackEndR) <= 2 && ABS(BlackEndM - BlackEndL) <= 2)
+                //{
+                //    g_Derict = Angle;//直角
+                //}
+                if (ABS(BlackEndL - BlackEndR) < 5)          ///////////////////////需要调（2017年3月22日19:26:13）  
                 {
                     g_Derict = M_BlackEnd;//十字
+                    dir = "十字";
                 }
                 else if (BlackEndL > BlackEndR)
                 {
                     g_Derict = L_BlackEnd;//左
+                    dir = "左";
                 }
                 else
                 {
                     g_Derict = R_BlackEnd;//右
+                    dir = "右";
                 }
             }
         }
@@ -892,8 +903,8 @@ namespace img_player
                 }
                 RightBlack[i] = sum / 5;
             }
-            if(OV7725_EAGLE_H - (RightStableNumbers - 6)<60&& OV7725_EAGLE_H - (RightStableNumbers - 6)>0)
-            P2_X = RightBlack[OV7725_EAGLE_H - (RightStableNumbers - 6)];
+            if (OV7725_EAGLE_H - (RightStableNumbers - 6) < 60 && OV7725_EAGLE_H - (RightStableNumbers - 6) > 0)
+                P2_X = RightBlack[OV7725_EAGLE_H - (RightStableNumbers - 6)];
             P2_Y = OV7725_EAGLE_H - (RightStableNumbers - 6);
 
         }
@@ -2081,7 +2092,7 @@ namespace img_player
         int StandardRoadType = 1;
         int StraightToBendCount = 0;
         int LastRoadType = 0;
-       public int RoadType = -1;
+        public int RoadType = -1;
         int[] HistoryRoadType = new int[4];
         int[] RoadTypeData2 = new int[Size2];
         int ElementCount2 = 0;
@@ -2339,7 +2350,7 @@ namespace img_player
         volatile int IsStartLine = 0;
         int CrossingBegin = 0;
         int CrossingCount = 0;
-        
+
         int Foresight = 15;//定义前瞻量
         int StraightFS = 45;
         int SmallSFS = 45;
@@ -2534,8 +2545,8 @@ namespace img_player
                 MidPos = OV7725_EAGLE_W / 2 - 1;//改动过，按照我的理解应该是这个
 
                 EndPos = OV7725_EAGLE_H - 1;
-
-                Error = GetSteerError(StartPos, EndPos, MidPos);
+                if (EndPos > StartPos)
+                    Error = GetSteerError(StartPos, EndPos, MidPos);
 
                 //	SERVO((int32)SERVO_STEER(Error));
 
