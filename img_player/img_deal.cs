@@ -26,6 +26,7 @@ namespace img_player
         public int[] imgbuff = new int[600];      //定义存储接收图像的数组
         int[] img = new int[4800];     //解压后数组
         int[,] IMG_BUFF = new int[60, 80];
+        bool Iscircle = false;
         public bool breakflag = false;
         public void image_deal()
         {
@@ -152,15 +153,34 @@ namespace img_player
 
             BlackEndLMR = (BlackEndL + BlackEndM + BlackEndR);//最远有效黑点累和
                                                               //判断十字左右倾
+            Iscircle = false;
             if (BlackEndMax == BlackEndL)
             {
-                g_Derict = L_BlackEnd;//左
-                dir = "左";
+                if (BlackEndR > BlackEndM && BlackEndL - BlackEndM < 10 && BlackEndL > 30 && BlackEndR > 30 && BlackEndM > 30)
+                {
+                    Iscircle = true;
+                    dir = "圆环";
+                    g_Derict = L_BlackEnd;
+                }
+                else
+                {
+                    g_Derict = L_BlackEnd;//左
+                    dir = "左";
+                }
             }
             else if (BlackEndMax == BlackEndR)
             {
-                g_Derict = R_BlackEnd;//右
-                dir = "右";
+                if (BlackEndL > BlackEndM && BlackEndL - BlackEndM < 10 && BlackEndL > 30 && BlackEndR > 30 && BlackEndM > 30)
+                {
+                    dir = "圆环";
+                    g_Derict = R_BlackEnd;
+                    Iscircle = true;
+                }
+                else
+                {
+                    g_Derict = R_BlackEnd;//右
+                    dir = "右";
+                }
             }
             else if (BlackEndMax == BlackEndM)
             {
@@ -1923,11 +1943,14 @@ namespace img_player
                         while (ValidLineR[pos] == 0)
                         {
                             pos++;
+                            if (pos >= 59) break;   //2017年3月25日16:24:29修改bug
                         }
-                        while (ValidLineR[pos] == 1)
-                        {
-                            pos++;
-                        }
+                        if (pos < 60)
+                            while (ValidLineR[pos] == 1)
+                            {
+                                pos++;
+                                if (pos >= 59) break;
+                            }
                         startPos = pos - 2;
                         pos += 8;
                         while (pos < OV7725_EAGLE_H - 1 && (ValidLineR[pos] == 0 || RightBlack[pos] > OV7725_EAGLE_W - 3))
@@ -2530,7 +2553,15 @@ namespace img_player
                     LineWeight[i] = 0;
                 }
             }
-
+            if (Iscircle)
+            {
+                Error = (R_BlackEnd - L_BlackEnd) * 1.0f;//2017年3月25日17:41:33尝试圆环
+                if (Error != 0)
+                    ke = Error;
+                else
+                    ke = 1;
+                return;
+            }
             if (IsCrossing && CrossingBegin == 0)//十字标志置位，但十字并未开始
             {
                 CrossingBegin = 1;//十字开始
