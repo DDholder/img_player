@@ -25,9 +25,36 @@ namespace img_player
         /***********************************************************************/
         public int[] imgbuff = new int[600];      //定义存储接收图像的数组
         int[] img = new int[4800];     //解压后数组
-        int[,] IMG_BUFF = new int[60, 80];
+        public int[,] IMG_BUFF = new int[60, 80];
         bool Iscircle = false;
         public bool breakflag = false;
+        public bool bturnimg = false;
+        public void Turnimage(int[,] img)
+        {
+            int t = 0;
+            for (int i = 0; i < 60; i++)
+            {
+                for (int j = 0; j < 40; j++)
+                {
+                    t = img[j, i];
+                    img[j, i] = img[79 - j, i];
+                    img[79 - j, i] = t;
+                }
+            }
+        }
+        public void Turnimage2(int[,] img)
+        {
+            int t = 0;
+            for (int i = 0; i < 60; i++)
+            {
+                for (int j = 0; j < 40; j++)
+                {
+                    t = img[i, j];
+                    img[i, j] = img[i, 79 - j];
+                    img[i, 79 - j] = t;
+                }
+            }
+        }
         public void image_deal()
         {
             if (breakflag)
@@ -45,6 +72,7 @@ namespace img_player
                     k++;
                 }
             }
+            if (bturnimg) Turnimage2(IMG_BUFF);
             GetImageParam();//提取图像特征
             MidLineProcess();//中心线处理
 
@@ -378,6 +406,7 @@ namespace img_player
                     }
                 }//for结束--黑线提取结束
             }//for结束-- 行扫描完
+
         }
 
 
@@ -1889,7 +1918,7 @@ namespace img_player
                                 CommonRectificate(RightBlack, pos - 2, TripPos);
                                 ProcessFlag = 1;
                             }
-                            else if (NoValidLMax > 20)
+                            else if (NoValidLMax > 25)
                             {
                                 RightBlack[pos - 2] = 2;
                                 CommonRectificate(RightBlack, pos - 2, TripPos);
@@ -2348,7 +2377,7 @@ namespace img_player
         {
             int i = 0;
             //unsigned char iCount=0;
-            int Black_Sum = 0;
+            float Black_Sum = 0;
             int weightSum = 0;
             float TemError = 0.0f;
             MidLineExcursion = 0;

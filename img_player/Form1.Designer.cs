@@ -56,6 +56,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.checktrunimg = new System.Windows.Forms.CheckBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.play_bar)).BeginInit();
@@ -136,7 +138,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(763, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1126, 28);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -310,11 +312,33 @@
             this.label4.TabIndex = 20;
             this.label4.Text = "label4";
             // 
+            // checktrunimg
+            // 
+            this.checktrunimg.AutoSize = true;
+            this.checktrunimg.Location = new System.Drawing.Point(600, 412);
+            this.checktrunimg.Name = "checktrunimg";
+            this.checktrunimg.Size = new System.Drawing.Size(89, 19);
+            this.checktrunimg.TabIndex = 21;
+            this.checktrunimg.Text = "反转图像";
+            this.checktrunimg.UseVisualStyleBackColor = true;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBox3.Location = new System.Drawing.Point(775, 56);
+            this.textBox3.Multiline = true;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(296, 342);
+            this.textBox3.TabIndex = 22;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(763, 439);
+            this.ClientSize = new System.Drawing.Size(1126, 439);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.checktrunimg);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
@@ -379,6 +403,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checktrunimg;
+        private System.Windows.Forms.TextBox textBox3;
     }
 }
 

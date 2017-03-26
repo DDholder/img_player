@@ -72,6 +72,10 @@ namespace img_player
             play_bar.Maximum = time;
             play_bar.Value = retime;
             play_pro.Text = retime.ToString() + "/" + time.ToString();
+            if (checktrunimg.Checked)
+                img_Handler.bturnimg = true;
+            else
+                img_Handler.bturnimg = false;
             if (imgDealEnable.Checked)
             {
                 img_Handler.imgbuff = fps[num].img;
@@ -100,9 +104,17 @@ namespace img_player
 
                 }
             }
+           
             Changemap(fps[num].img);
             //Display(map);
             //Invalidate();
+            if (checktrunimg.Checked)
+            {
+                img_Handler.Turnimage(map);
+                img_Handler.bturnimg = true;
+            }
+            else
+                img_Handler.bturnimg = false;
             pictureBox1.Refresh();
         }
         void Changemap(int[] imgbuff)
@@ -345,6 +357,7 @@ namespace img_player
             Rectangle rect;
             Color col = Color.FromArgb(50, 0, 0, 0);
             Brush bsh = new SolidBrush(col);
+            textBox3.Clear();
             for (int i = 0; i < 60; i++)
             {
                 for (int j = 0; j < 80; j++)
@@ -362,6 +375,7 @@ namespace img_player
                     }
 
                 }
+                
                 if (imgDealEnable.Checked)
                 {
                     rect = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
@@ -370,20 +384,36 @@ namespace img_player
                     e.Graphics.FillRectangle(Brushes.Red, rect);
                     rect = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
                     e.Graphics.FillRectangle(Brushes.Yellow, rect);
-                }
-            }
-            label4.Text =img_Handler.dir;
-            for (int i = 0; i < 60; i++)
-            {
-                rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
-                e.Graphics.FillRectangle(bsh, rect);
-                rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
-                e.Graphics.FillRectangle(bsh, rect);
-                rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
-                e.Graphics.FillRectangle(bsh, rect);
-            }
-        }
+                    //textBox3.AppendText(img_Handler.LeftBlack[i].ToString() + "  ");
+                    //textBox3.AppendText(img_Handler.BlackLineData[i].ToString() + "  ");
+                    //textBox3.AppendText(img_Handler.RightBlack[i].ToString() + "  ");
+                    //textBox3.AppendText(lastl[i].ToString() + "  ");
+                    //textBox3.AppendText(lastm[i].ToString() + "  ");
+                    //textBox3.AppendText(lastr[i].ToString() + "\n");
 
+                }
+                
+            }
+            //for (int j = 0; j < 60; j++)
+            //{
+            //    lastl[j] = img_Handler.LeftBlack[j];
+            //    lastm[j] = img_Handler.BlackLineData[j];
+            //    lastr[j] = img_Handler.RightBlack[j];
+            //}
+            label4.Text =img_Handler.dir;
+            //for (int i = 0; i < 60; i++)
+            //{
+            //    rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
+            //    e.Graphics.FillRectangle(bsh, rect);
+            //    rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
+            //    e.Graphics.FillRectangle(bsh, rect);
+            //    rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
+            //    e.Graphics.FillRectangle(bsh, rect);
+            //}
+        }
+        int[] lastl = new int[60];
+        int[] lastm = new int[60];
+        int[] lastr = new int[60];
         void Readpic(byte[] str, int n)
         {
             for (int i = 0; i < n; i++)
