@@ -2383,6 +2383,7 @@ namespace img_player
             MidLineExcursion = 0;
             for (i = 1; i < OV7725_EAGLE_H; i++)
             {
+                LineWeight[i] = 1;                             //2017年3月27日18:03:56去掉权重
                 Black_Sum += BlackLineData[i] * LineWeight[i];
                 weightSum += LineWeight[i];
             }
@@ -2457,7 +2458,7 @@ namespace img_player
             }
 
             Error = 0.0f;
-
+            RoadType = 505;                     //2017年3月27日18:02:48去掉赛道检测
             switch (RoadType)
             {
                 case 0://直

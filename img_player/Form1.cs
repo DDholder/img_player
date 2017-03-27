@@ -54,11 +54,11 @@ namespace img_player
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (bConnect && comboBox1.Text == "串口")
+            if (bConnect && Datamode.Text == "串口")
             {
                 play(0);
             }
-            else if (state == "play" && comboBox1.Text == "本地")
+            else if (state == "play" && Datamode.Text == "本地")
             {
                 if (retime < time)
                 {
@@ -340,7 +340,7 @@ namespace img_player
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            comboBox1.SelectedIndex = 0;
+            Datamode.Text = "串口";
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -401,19 +401,32 @@ namespace img_player
             //    lastr[j] = img_Handler.RightBlack[j];
             //}
             label4.Text =img_Handler.dir;
-            //for (int i = 0; i < 60; i++)
-            //{
-            //    rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
-            //    e.Graphics.FillRectangle(bsh, rect);
-            //    rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
-            //    e.Graphics.FillRectangle(bsh, rect);
-            //    rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
-            //    e.Graphics.FillRectangle(bsh, rect);
-            //}
+            for (int i = 0; i < 60; i++)
+            {
+                rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
+                e.Graphics.FillRectangle(bsh, rect);
+                rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
+                e.Graphics.FillRectangle(bsh, rect);
+                rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
+                e.Graphics.FillRectangle(bsh, rect);
+            }
         }
         int[] lastl = new int[60];
         int[] lastm = new int[60];
         int[] lastr = new int[60];
+
+        private void Datamode_Click(object sender, EventArgs e)
+        {
+            if (Datamode.Text=="串口")
+            {
+                Datamode.Text = "本地";
+            }
+            else
+            {
+                Datamode.Text = "串口";
+            }
+        }
+
         void Readpic(byte[] str, int n)
         {
             for (int i = 0; i < n; i++)

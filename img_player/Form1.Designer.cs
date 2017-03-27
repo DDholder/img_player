@@ -50,7 +50,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.imgDealEnable = new System.Windows.Forms.CheckBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -58,6 +57,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.checktrunimg = new System.Windows.Forms.CheckBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.Datamode = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.play_bar)).BeginInit();
@@ -253,18 +253,6 @@
             this.textBox1.Size = new System.Drawing.Size(100, 25);
             this.textBox1.TabIndex = 14;
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "本地",
-            "串口"});
-            this.comboBox1.Location = new System.Drawing.Point(592, 358);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
-            this.comboBox1.TabIndex = 15;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -332,11 +320,22 @@
             this.textBox3.Size = new System.Drawing.Size(296, 342);
             this.textBox3.TabIndex = 22;
             // 
+            // Datamode
+            // 
+            this.Datamode.Location = new System.Drawing.Point(580, 355);
+            this.Datamode.Name = "Datamode";
+            this.Datamode.Size = new System.Drawing.Size(100, 40);
+            this.Datamode.TabIndex = 23;
+            this.Datamode.Text = "串口";
+            this.Datamode.UseVisualStyleBackColor = true;
+            this.Datamode.Click += new System.EventHandler(this.Datamode_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1126, 439);
+            this.Controls.Add(this.Datamode);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.checktrunimg);
             this.Controls.Add(this.label4);
@@ -344,7 +343,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.imgDealEnable);
             this.Controls.Add(this.label1);
@@ -397,7 +395,6 @@
         private System.Windows.Forms.ContextMenuStrip ListMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 打开ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
-        private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label3;
@@ -405,6 +402,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checktrunimg;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Button Datamode;
     }
 }
 
