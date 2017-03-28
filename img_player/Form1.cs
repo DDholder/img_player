@@ -349,7 +349,7 @@ namespace img_player
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            img_Handler.breakflag = true;
+            img_Handler.breakflag = !img_Handler.breakflag;
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)

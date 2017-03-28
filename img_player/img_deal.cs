@@ -75,7 +75,6 @@ namespace img_player
             if (bturnimg) Turnimage2(IMG_BUFF);
             GetImageParam();//提取图像特征
             MidLineProcess();//中心线处理
-
             RTRecognition();//赛道检测
             DirectionCtrol();
         }
@@ -246,6 +245,7 @@ namespace img_player
         byte WhiteRow = 0;
         byte[] LineType = new byte[OV7725_EAGLE_H];//全黑行计数
 
+        //2017年3月27日19:18:58理解：边缘跳变检测（赛道类型用）
         void GetExcursionLine()
         {
             int i = 0, j = 0;
@@ -419,7 +419,8 @@ namespace img_player
         int ValidExcursionCount = 0;//有效偏移量计数
         int[] TripPointPos = new int[OV7725_EAGLE_H];//产生跳变的具体行数写入该数组
         int[] SubValue = new int[OV7725_EAGLE_H];//上下两行产生的跳变差
-
+        //2017年3月27日19:19:33理解：赛道类型判断，
+        //函数内参数引用：RTRecognition
         void GetEPerCount()
         {
             int i = 0, j = 0;
@@ -556,7 +557,7 @@ namespace img_player
         return code:               none
 
         ***********************************************/
-
+        //函数引用：GetLMR
         void black_deal(int mid, int[,] imgb)
         {
             int i = 0, j = 0, num_F = 0;
@@ -596,7 +597,7 @@ namespace img_player
 
 
 
-
+        //2017年3月27日19:31:23理解：边缘检测（中线用）、中线获取
         void GetLMR()
         {
             int i = 0, j = 0;
