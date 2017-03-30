@@ -73,7 +73,7 @@
             this.pictureBox1.Size = new System.Drawing.Size(320, 228);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.PictureBox1_Paint);
             // 
             // Play_Pause
             // 
@@ -164,7 +164,7 @@
             this.play_bar.Name = "play_bar";
             this.play_bar.Size = new System.Drawing.Size(335, 56);
             this.play_bar.TabIndex = 8;
-            this.play_bar.Scroll += new System.EventHandler(this.play_bar_Scroll);
+            this.play_bar.Scroll += new System.EventHandler(this.Play_bar_Scroll);
             // 
             // Open
             // 
@@ -187,6 +187,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(167, 244);
             this.listBox1.TabIndex = 10;
+            this.listBox1.DoubleClick += new System.EventHandler(this.ListBox1_DoubleClick);
             // 
             // ListMenuStrip1
             // 
@@ -213,7 +214,7 @@
             // 
             // timer1
             // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // play_pro
             // 
@@ -279,7 +280,7 @@
             this.label3.Size = new System.Drawing.Size(67, 15);
             this.label3.TabIndex = 18;
             this.label3.Text = "赛道类型";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.label3.Click += new System.EventHandler(this.Label3_Click);
             // 
             // button1
             // 
@@ -289,7 +290,7 @@
             this.button1.TabIndex = 19;
             this.button1.Text = "开始中断";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // label4
             // 
@@ -363,6 +364,7 @@
             this.Name = "Form1";
             this.Text = "图像播放器";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

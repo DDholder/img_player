@@ -52,22 +52,22 @@ namespace img_player
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             if (bConnect && Datamode.Text == "串口")
             {
-                play(0);
+                Play(0);
             }
             else if (state == "play" && Datamode.Text == "本地")
             {
                 if (retime < time)
                 {
-                    play(retime);
+                    Play(retime);
                     retime++;
                 }
             }
         }
-        void play(int num)
+        void Play(int num)
         {
             play_bar.Maximum = time;
             play_bar.Value = retime;
@@ -104,7 +104,7 @@ namespace img_player
 
                 }
             }
-           
+
             Changemap(fps[num].img);
             //Display(map);
             //Invalidate();
@@ -149,12 +149,12 @@ namespace img_player
                 for (int j = 0; j < 80; j++)
                 {
 
-                    if (image_buff[j, i] == 1&&j!=19 && j != 39 && j != 59)
+                    if (image_buff[j, i] == 1 && j != 19 && j != 39 && j != 59)
                     {
                         rect = new Rectangle(j * 3, i * 3, 3, 3);
                         g.FillRectangle(Brushes.Black, rect);
                     }
-                    else  if( j != 19 && j != 39 && j != 59)
+                    else if (j != 19 && j != 39 && j != 59)
                     {
                         rect = new Rectangle(j * 3, i * 3, 3, 3);
                         g.FillRectangle(Brushes.White, rect);
@@ -174,11 +174,11 @@ namespace img_player
             label4.Text = img_Handler.dir;
             for (int i = 0; i < 60; i++)
             {
-                rect = new Rectangle(19 * 3 , i * 3, 3, 3);
+                rect = new Rectangle(19 * 3, i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
-                rect = new Rectangle(39 * 3 , i * 3, 3, 3);
+                rect = new Rectangle(39 * 3, i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
-                rect = new Rectangle(59 * 3 , i * 3, 3, 3);
+                rect = new Rectangle(59 * 3, i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
 
 
@@ -213,23 +213,26 @@ namespace img_player
         {
             int n = listBox1.SelectedIndex;
             // System.Diagnostics.Process.Start(filenames[n]);
-            imgdatainit();
-            try
+            if (n >= 0)
             {
-                FileStream file = new FileStream(filenames[n], FileMode.Open);
-                byte[] readByte = new byte[file.Length];
-                file.Seek(0, SeekOrigin.Begin);
-                file.Read(readByte, 0, readByte.Length); //byData传进来的字节数组,用以接受FileStream对象中的数据,第2个参数是字节数组中开始写入数据的位置,它通常是0,表示从数组的开端文件中向数组写数据,最后一个参数规定从文件读多少字符.
-                Read_imgFile(readByte, readByte.Length);
-                file.Close();
-                play(0);
-            }
-            catch (IOException err)
-            {
-                Console.WriteLine(err.ToString());
+                Imgdatainit();
+                try
+                {
+                    FileStream file = new FileStream(filenames[n], FileMode.Open);
+                    byte[] readByte = new byte[file.Length];
+                    file.Seek(0, SeekOrigin.Begin);
+                    file.Read(readByte, 0, readByte.Length); //byData传进来的字节数组,用以接受FileStream对象中的数据,第2个参数是字节数组中开始写入数据的位置,它通常是0,表示从数组的开端文件中向数组写数据,最后一个参数规定从文件读多少字符.
+                    Read_imgFile(readByte, readByte.Length);
+                    file.Close();
+                    Play(0);
+                }
+                catch (IOException err)
+                {
+                    Console.WriteLine(err.ToString());
+                }
             }
         }
-        void imgdatainit()
+        void Imgdatainit()
         {
             for (int i = 0; i < time; i++)
             {
@@ -267,13 +270,13 @@ namespace img_player
             }
         }
 
-        private void play_bar_Scroll(object sender, EventArgs e)
+        private void Play_bar_Scroll(object sender, EventArgs e)
         {
             retime = play_bar.Value;
             if (retime < time)
             {
                 play_pro.Text = retime.ToString() + "/" + time.ToString();
-                play(retime);
+                Play(retime);
             }
         }
 
@@ -282,7 +285,7 @@ namespace img_player
             if (retime > 0)
             {
                 retime--;
-                play(retime);
+                Play(retime);
             }
         }
 
@@ -291,7 +294,7 @@ namespace img_player
             if (retime < time)
             {
                 retime++;
-                play(retime);
+                Play(retime);
             }
         }
 
@@ -311,7 +314,7 @@ namespace img_player
         {
             int n = listBox1.SelectedIndex;
             // System.Diagnostics.Process.Start(filenames[n]);
-            imgdatainit();
+            Imgdatainit();
             try
             {
                 FileStream file = new FileStream(filenames[n], FileMode.Open);
@@ -320,7 +323,7 @@ namespace img_player
                 file.Read(readByte, 0, readByte.Length); //byData传进来的字节数组,用以接受FileStream对象中的数据,第2个参数是字节数组中开始写入数据的位置,它通常是0,表示从数组的开端文件中向数组写数据,最后一个参数规定从文件读多少字符.
                 Read_imgFile(readByte, readByte.Length);
                 file.Close();
-                play(0);
+                Play(0);
             }
             catch (IOException err)
             {
@@ -340,19 +343,20 @@ namespace img_player
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.KeyPreview = true;
             Datamode.Text = "串口";
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void Label3_Click(object sender, EventArgs e)
         {
 
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             img_Handler.breakflag = !img_Handler.breakflag;
         }
 
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Rectangle rect;
             Color col = Color.FromArgb(50, 0, 0, 0);
@@ -375,7 +379,7 @@ namespace img_player
                     }
 
                 }
-                
+
                 if (imgDealEnable.Checked)
                 {
                     rect = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
@@ -392,7 +396,7 @@ namespace img_player
                     //textBox3.AppendText(lastr[i].ToString() + "\n");
 
                 }
-                
+
             }
             //for (int j = 0; j < 60; j++)
             //{
@@ -400,7 +404,7 @@ namespace img_player
             //    lastm[j] = img_Handler.BlackLineData[j];
             //    lastr[j] = img_Handler.RightBlack[j];
             //}
-            label4.Text =img_Handler.dir;
+            label4.Text = img_Handler.dir;
             for (int i = 0; i < 60; i++)
             {
                 rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
@@ -417,13 +421,45 @@ namespace img_player
 
         private void Datamode_Click(object sender, EventArgs e)
         {
-            if (Datamode.Text=="串口")
+            if (Datamode.Text == "串口")
             {
                 Datamode.Text = "本地";
             }
             else
             {
                 Datamode.Text = "串口";
+            }
+        }
+
+        private void ListBox1_DoubleClick(object sender, EventArgs e)
+        {
+            int n = listBox1.SelectedIndex;
+            // System.Diagnostics.Process.Start(filenames[n]);
+            Imgdatainit();
+            try
+            {
+                FileStream file = new FileStream(filenames[n], FileMode.Open);
+                byte[] readByte = new byte[file.Length];
+                file.Seek(0, SeekOrigin.Begin);
+                file.Read(readByte, 0, readByte.Length); //byData传进来的字节数组,用以接受FileStream对象中的数据,第2个参数是字节数组中开始写入数据的位置,它通常是0,表示从数组的开端文件中向数组写数据,最后一个参数规定从文件读多少字符.
+                Read_imgFile(readByte, readByte.Length);
+                file.Close();
+                Play(0);
+            }
+            catch (IOException err)
+            {
+                Console.WriteLine(err.ToString());
+            }
+        }
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
+                case 's': Play_Pause_Click(null, null); break;
+                case 'a': PgUp_Click(null, null); break;
+                case 'd': PgDn_Click(null, null); break;
+                default: break;
             }
         }
 
