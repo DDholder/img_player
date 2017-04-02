@@ -75,7 +75,7 @@ namespace img_player
             if (bturnimg) Turnimage2(IMG_BUFF);
             GetImageParam();//提取图像特征
             MidLineProcess();//中心线处理
-            RTRecognition();//赛道检测
+            //RTRecognition();//赛道检测
             DirectionCtrol();
         }
         void img_extract(int[] dst, int[] src, int srclen)
@@ -102,8 +102,8 @@ namespace img_player
         void GetImageParam()
         {
             GetBlackEndParam();//获取黑线截至行
-            GetExcursionLine();//获取偏移量线，识别十字交叉
-            GetEPerCount();//有效偏移量，平均每列偏移量	
+            //GetExcursionLine();//获取偏移量线，识别十字交叉
+            //GetEPerCount();//有效偏移量，平均每列偏移量	
         }
         /******************************************************************************
         //获取黑线截至行
@@ -623,7 +623,7 @@ namespace img_player
             ValidLineCount2 = 0;
 
 
-
+            
             for (i = OV7725_EAGLE_H - 1; i >= 0 && !MidEnd; i--)//最近一行开始
             {
                 // 初始化指针
@@ -1029,7 +1029,8 @@ namespace img_player
         ******************************************************************************/
 
         int CompensateCount = 0;
-
+     /************************************2017年4月2日11:40:31******************************************/
+        //发现会造成左右偏差过大
         void MidLineCompensate()
         {
             int i = 0, icount = 0, j = 0;
@@ -2108,19 +2109,21 @@ namespace img_player
             //正常情况提取中心线
             if (StableNumbers > 12)
             {
-                LAverageFilter();//左边缘滤波
-                RAverageFilter();//右边缘滤波
-                GetFinalMidLine();//获取舵机中心控制线
-                AverageFilter();//滤波处理
-                MidLineCompensate();//中心线补偿
+                //LAverageFilter();//左边缘滤波
+                //RAverageFilter();//右边缘滤波
+                //GetFinalMidLine();//获取舵机中心控制线
+                //AverageFilter();//滤波处理
+                //MidLineCompensate();//中心线补偿
                 StoreFlag = true;
                 StoreMidLine();//存储中心线数据
-                GetSectionParam();//分段提取偏差
-                GetMidLineVariance();//提取方差
+                /*用于赛道检测*/
+                //GetSectionParam();//分段提取偏差
+                /*用于赛道检测*/
+                //GetMidLineVariance();//提取方差
             }
             else
             {
-                GetSpecialError();//获取特殊偏差
+                //GetSpecialError();//获取特殊偏差
             }
             //处理十字
             ProcessCrossing();
@@ -2135,7 +2138,8 @@ namespace img_player
             else
             {
                 CrossingMidFilter();//十字中线提取滤波顺滑
-                GetSectionParam();//分段提取偏差
+                /*用于赛道检测*/
+                //GetSectionParam();//分段提取偏差
             }
         }
 

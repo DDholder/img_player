@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace img_player
 {
-    public struct points
+    public struct Points
     {
         public int[] img;
     }
@@ -26,7 +26,7 @@ namespace img_player
             this.UpdateStyles();
             InitializeComponent();
         }
-        public points[] fps = new points[6000];//6000帧数据
+        public Points[] fps = new Points[6000];//6000帧数据
         byte[] buff = new byte[600];//串口读出的图像
         int[,] map = new int[80, 60];//解压后图像
         public int time = 0, retime = 0;//记录时间和回放时间
@@ -193,9 +193,11 @@ namespace img_player
         }
         private void 添加文件ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog opdialog = new OpenFileDialog();
-            opdialog.Multiselect = true;
-            opdialog.Filter = "txt文件|*.txt";
+            OpenFileDialog opdialog = new OpenFileDialog()
+            {
+                Multiselect = true,
+                Filter = "txt文件|*.txt"
+            };
             DialogResult result = opdialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -389,21 +391,21 @@ namespace img_player
                     rect = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
                     e.Graphics.FillRectangle(Brushes.Yellow, rect);
                     //textBox3.AppendText(img_Handler.LeftBlack[i].ToString() + "  ");
+                    //textBox3.AppendText(lastr[i].ToString() + "||");
                     //textBox3.AppendText(img_Handler.BlackLineData[i].ToString() + "  ");
+                    //textBox3.AppendText(lastm[i].ToString() + "||");
                     //textBox3.AppendText(img_Handler.RightBlack[i].ToString() + "  ");
-                    //textBox3.AppendText(lastl[i].ToString() + "  ");
-                    //textBox3.AppendText(lastm[i].ToString() + "  ");
-                    //textBox3.AppendText(lastr[i].ToString() + "\n");
+                    //textBox3.AppendText(lastl[i].ToString() + "\n");
 
                 }
 
             }
-            //for (int j = 0; j < 60; j++)
-            //{
-            //    lastl[j] = img_Handler.LeftBlack[j];
-            //    lastm[j] = img_Handler.BlackLineData[j];
-            //    lastr[j] = img_Handler.RightBlack[j];
-            //}
+            for (int j = 0; j < 60; j++)
+            {
+                lastl[j] = img_Handler.LeftBlack[j];
+                lastm[j] = img_Handler.BlackLineData[j];
+                lastr[j] = img_Handler.RightBlack[j];
+            }
             label4.Text = img_Handler.dir;
             for (int i = 0; i < 60; i++)
             {
