@@ -349,6 +349,7 @@ namespace img_player
             Datamode.Text = "串口";
         }
 
+
         private void Label3_Click(object sender, EventArgs e)
         {
 
