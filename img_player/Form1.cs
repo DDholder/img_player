@@ -29,6 +29,7 @@ namespace img_player
         public Points[] fps = new Points[6000];//6000帧数据
         byte[] buff = new byte[600];//串口读出的图像
         int[,] map = new int[80, 60];//解压后图像
+        float zoomx = 1, zoomy = 1;//缩放倍数
         public int time = 0, retime = 0;//记录时间和回放时间
         List<byte> readList = new List<byte>();//文件读取缓存链表
         string state = "stop";
@@ -144,6 +145,10 @@ namespace img_player
             Color col = Color.FromArgb(50, 0, 0, 0);
             Brush bsh = new SolidBrush(col);
             Graphics g = pictureBox1.CreateGraphics();
+            zoomx = pictureBox1.Width / 240;
+            if (zoomx < 1) zoomx = 1;
+            zoomy = pictureBox1.Height / 180;
+            if (zoomy < 1) zoomy = 1;
             for (int i = 0; i < 60; i++)
             {
                 for (int j = 0; j < 80; j++)
@@ -151,43 +156,43 @@ namespace img_player
 
                     if (image_buff[j, i] == 1 && j != 19 && j != 39 && j != 59)
                     {
-                        rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        rect = new Rectangle((int)(j * 3 * zoomx), i * 3, 3, 3);
                         g.FillRectangle(Brushes.Black, rect);
                     }
                     else if (j != 19 && j != 39 && j != 59)
                     {
-                        rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        rect = new Rectangle((int)(j * 3 * zoomx), i * 3, 3, 3);
                         g.FillRectangle(Brushes.White, rect);
                     }
 
                 }
                 if (imgDealEnable.Checked)
                 {
-                    rect = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
+                    rect = new Rectangle((int)(img_Handler.LeftBlack[i] * 3 * zoomx), i * 3, 3, 3);
                     g.FillRectangle(Brushes.Green, rect);
-                    rect = new Rectangle(img_Handler.RightBlack[i] * 3, i * 3, 3, 3);
+                    rect = new Rectangle((int)(img_Handler.RightBlack[i] * 3 * zoomx), i * 3, 3, 3);
                     g.FillRectangle(Brushes.Red, rect);
-                    rect = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
+                    rect = new Rectangle((int)(img_Handler.BlackLineData[i] * 3 * zoomx), i * 3, 3, 3);
                     g.FillRectangle(Brushes.Yellow, rect);
                 }
             }
             label4.Text = img_Handler.dir;
             for (int i = 0; i < 60; i++)
             {
-                rect = new Rectangle(19 * 3, i * 3, 3, 3);
+                rect = new Rectangle((int)(19 * 3* zoomx), i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
-                rect = new Rectangle(39 * 3, i * 3, 3, 3);
+                rect = new Rectangle((int)(39 * 3* zoomx), i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
-                rect = new Rectangle(59 * 3, i * 3, 3, 3);
+                rect = new Rectangle((int)(59 * 3* zoomx), i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
 
 
 
-                rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
+                rect = new Rectangle((int)((19 * 3+1)* zoomx) , i * 3, 1, 3);
                 g.FillRectangle(bsh, rect);
-                rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
+                rect = new Rectangle((int)((39 * 3 + 1) * zoomx), i * 3, 1, 3);
                 g.FillRectangle(bsh, rect);
-                rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
+                rect = new Rectangle((int)((59 * 3 + 1) * zoomx), i * 3, 1, 3);
                 g.FillRectangle(bsh, rect);
             }
         }
@@ -362,9 +367,16 @@ namespace img_player
         private void PictureBox1_Paint(object sender, PaintEventArgs e)
         {
             Rectangle rect;
-            Color col = Color.FromArgb(50, 0, 0, 0);
+            Color col = Color.FromArgb(150, 0, 0, 0);
             Brush bsh = new SolidBrush(col);
+            
             textBox3.Clear();
+            zoomx = pictureBox1.Width / 240f;
+            if (zoomx < 1) zoomx = 1f;
+            zoomy = pictureBox1.Height / 180f;
+            if (zoomy < 1) zoomy = 1f;
+            int rectl = (int)(3 * zoomx);
+            int rectw = (int)(3 * zoomy);
             for (int i = 0; i < 60; i++)
             {
                 for (int j = 0; j < 80; j++)
@@ -372,12 +384,12 @@ namespace img_player
 
                     if (map[j, i] == 1 && j != 19 && j != 39 && j != 59)
                     {
-                        rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        rect = new Rectangle((int)(j * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                         e.Graphics.FillRectangle(Brushes.Black, rect);
                     }
                     else if (j != 19 && j != 39 && j != 59)
                     {
-                        rect = new Rectangle(j * 3, i * 3, 3, 3);
+                        rect = new Rectangle((int)(j * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                         e.Graphics.FillRectangle(Brushes.White, rect);
                     }
 
@@ -385,11 +397,11 @@ namespace img_player
 
                 if (imgDealEnable.Checked)
                 {
-                    rect = new Rectangle(img_Handler.LeftBlack[i] * 3, i * 3, 3, 3);
+                    rect = new Rectangle((int)(img_Handler.LeftBlack[i] * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                     e.Graphics.FillRectangle(Brushes.Green, rect);
-                    rect = new Rectangle(img_Handler.RightBlack[i] * 3, i * 3, 3, 3);
+                    rect = new Rectangle((int)(img_Handler.RightBlack[i] * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                     e.Graphics.FillRectangle(Brushes.Red, rect);
-                    rect = new Rectangle(img_Handler.BlackLineData[i] * 3, i * 3, 3, 3);
+                    rect = new Rectangle((int)(img_Handler.BlackLineData[i] * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                     e.Graphics.FillRectangle(Brushes.Yellow, rect);
                     //textBox3.AppendText(img_Handler.LeftBlack[i].ToString() + "  ");
                     //textBox3.AppendText(lastr[i].ToString() + "||");
@@ -410,11 +422,11 @@ namespace img_player
             label4.Text = img_Handler.dir;
             for (int i = 0; i < 60; i++)
             {
-                rect = new Rectangle(19 * 3 + 1, i * 3, 1, 3);
+                rect = new Rectangle((int)(19 * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                 e.Graphics.FillRectangle(bsh, rect);
-                rect = new Rectangle(39 * 3 + 1, i * 3, 1, 3);
+                rect = new Rectangle((int)(39 * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                 e.Graphics.FillRectangle(bsh, rect);
-                rect = new Rectangle(59 * 3 + 1, i * 3, 1, 3);
+                rect = new Rectangle((int)(59 * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                 e.Graphics.FillRectangle(bsh, rect);
             }
         }
@@ -464,6 +476,12 @@ namespace img_player
                 case 'd': PgDn_Click(null, null); break;
                 default: break;
             }
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            label5.Text = zoomx.ToString();
+            label6.Text = zoomy.ToString();
         }
 
         void Readpic(byte[] str, int n)
