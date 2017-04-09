@@ -1428,6 +1428,7 @@ namespace img_player
                                 }
                                 if (temLeft != 0)
                                 {
+                                    if(temi+5<80)//2017年4月9日18:44:20修改
                                     if (IMG_BUFF[i, temi] == Black && IMG_BUFF[i, temi + 1] == Black && IMG_BUFF[i, temi + 5] == Black)
                                     {
                                         temRight = temi;
