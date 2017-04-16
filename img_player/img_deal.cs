@@ -77,6 +77,7 @@ namespace img_player
             MidLineProcess();//中心线处理
             //RTRecognition();//赛道检测
             DirectionCtrol();
+            
         }
         void img_extract(int[] dst, int[] src, int srclen)
         {
@@ -623,7 +624,7 @@ namespace img_player
             ValidLineCount2 = 0;
 
 
-            
+
             for (i = OV7725_EAGLE_H - 1; i >= 0 && !MidEnd; i--)//最近一行开始
             {
                 // 初始化指针
@@ -1029,7 +1030,7 @@ namespace img_player
         ******************************************************************************/
 
         int CompensateCount = 0;
-     /************************************2017年4月2日11:40:31******************************************/
+        /************************************2017年4月2日11:40:31******************************************/
         //发现会造成左右偏差过大
         void MidLineCompensate()
         {
@@ -1428,13 +1429,13 @@ namespace img_player
                                 }
                                 if (temLeft != 0)
                                 {
-                                    if(temi+5<80)//2017年4月9日18:44:20修改
-                                    if (IMG_BUFF[i, temi] == Black && IMG_BUFF[i, temi + 1] == Black && IMG_BUFF[i, temi + 5] == Black)
-                                    {
-                                        temRight = temi;
-                                        bFoundFlag = true;
-                                        break;
-                                    }
+                                    if (temi + 5 < 80)//2017年4月9日18:44:20修改
+                                        if (IMG_BUFF[i, temi] == Black && IMG_BUFF[i, temi + 1] == Black && IMG_BUFF[i, temi + 5] == Black)
+                                        {
+                                            temRight = temi;
+                                            bFoundFlag = true;
+                                            break;
+                                        }
                                 }
                             }
                             if (bFoundFlag && temLeft + (temRight - temLeft) / 2 < g_BasePos)
@@ -2104,17 +2105,19 @@ namespace img_player
 
         void MidLineProcess()
         {
+            //2017年4月16日尝试圆环
+            ProgressCircle();
             StoreFlag = false;
             GetLMR();//提取左边缘，右边缘，中心线
 
             //正常情况提取中心线
             if (StableNumbers > 12)
             {
-                //LAverageFilter();//左边缘滤波
-                //RAverageFilter();//右边缘滤波
+                LAverageFilter();//左边缘滤波
+                RAverageFilter();//右边缘滤波
                 //GetFinalMidLine();//获取舵机中心控制线
-                //AverageFilter();//滤波处理
-                //MidLineCompensate();//中心线补偿
+                AverageFilter();//滤波处理
+                MidLineCompensate();//中心线补偿
                 StoreFlag = true;
                 StoreMidLine();//存储中心线数据
                 /*用于赛道检测*/
@@ -2127,8 +2130,8 @@ namespace img_player
                 //GetSpecialError();//获取特殊偏差
             }
             //处理十字
-            ProcessCrossing();
-
+            //ProcessCrossing();
+            
             if (!IsCrossing)
             {
                 if (StoreFlag)
@@ -2387,6 +2390,15 @@ namespace img_player
             int weightSum = 0;
             float TemError = 0.0f;
             MidLineExcursion = 0;
+            if (dir == "圆环")                                //2017年4月16日尝试圆环
+            {
+                for (int a = 59; a >= highY; a--)
+                {
+                    LeftBlack[a] = (int)AddCircleLine[a];
+                    RightBlack[a] = 79;
+                    BlackLineData[a] = (LeftBlack[a] + RightBlack[a]) / 2;
+                }
+            }
             for (i = 1; i < OV7725_EAGLE_H; i++)
             {
                 LineWeight[i] = 1;                             //2017年3月27日18:03:56去掉权重
@@ -2589,15 +2601,15 @@ namespace img_player
                     LineWeight[i] = 0;
                 }
             }
-            if (Iscircle)
-            {
-                Error = (R_BlackEnd - L_BlackEnd) * 1.0f;//2017年3月25日17:41:33尝试圆环
-                if (Error != 0)
-                    ke = Error;
-                else
-                    ke = 1;
-                return;
-            }
+            //if (Iscircle)
+            //{
+            //    Error = (R_BlackEnd - L_BlackEnd) * 1.0f;//2017年3月25日17:41:33尝试圆环
+            //    if (Error != 0)
+            //        ke = Error;
+            //    else
+            //        ke = 1;
+            //    return;
+            //}
             if (IsCrossing && CrossingBegin == 0)//十字标志置位，但十字并未开始
             {
                 CrossingBegin = 1;//十字开始
@@ -2647,6 +2659,44 @@ namespace img_player
             ke = Error;//把偏差传给电机进行差速
 
             LastError = Error;//更新	
+        }
+        //2017年4月16日尝试圆环
+        public int lowX = 0, highY = 0, highX = 0;
+        public float[] AddCircleLine = new float[60];
+        void ProgressCircle()
+        {
+            
+            if (dir == "圆环")
+            {
+                for (int i = 0; i < 40; i++)
+                {
+                    if (IMG_BUFF[59, i] == Black && IMG_BUFF[59, i + 1] == White)
+                    {
+                        lowX = i;
+                        break;
+                    }
+                    else
+                        lowX = 0;
+                }
+                for (int i = 59; i >0; i--)
+                {
+                    if(IMG_BUFF[i,39]==Black)
+                    {
+                        highY = i;
+                        break;
+                    }
+                }
+                highX = 39;
+                float temp = (highX - lowX) / (60f - highY);
+                for (int i = 59; i >= 0; i--)
+                {
+                    if (i == 59) AddCircleLine[i] = lowX;
+                    else
+                    {
+                        AddCircleLine[i] = AddCircleLine[i + 1]+temp;
+                    }
+                }
+            }
         }
     }
 }

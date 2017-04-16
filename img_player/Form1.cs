@@ -116,6 +116,7 @@ namespace img_player
             }
             else
                 img_Handler.bturnimg = false;
+
             pictureBox1.Refresh();
         }
         void Changemap(int[] imgbuff)
@@ -179,16 +180,16 @@ namespace img_player
             label4.Text = img_Handler.dir;
             for (int i = 0; i < 60; i++)
             {
-                rect = new Rectangle((int)(19 * 3* zoomx), i * 3, 3, 3);
+                rect = new Rectangle((int)(19 * 3 * zoomx), i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
-                rect = new Rectangle((int)(39 * 3* zoomx), i * 3, 3, 3);
+                rect = new Rectangle((int)(39 * 3 * zoomx), i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
-                rect = new Rectangle((int)(59 * 3* zoomx), i * 3, 3, 3);
+                rect = new Rectangle((int)(59 * 3 * zoomx), i * 3, 3, 3);
                 g.FillRectangle(Brushes.White, rect);
 
 
 
-                rect = new Rectangle((int)((19 * 3+1)* zoomx) , i * 3, 1, 3);
+                rect = new Rectangle((int)((19 * 3 + 1) * zoomx), i * 3, 1, 3);
                 g.FillRectangle(bsh, rect);
                 rect = new Rectangle((int)((39 * 3 + 1) * zoomx), i * 3, 1, 3);
                 g.FillRectangle(bsh, rect);
@@ -369,7 +370,7 @@ namespace img_player
             Rectangle rect;
             Color col = Color.FromArgb(150, 0, 0, 0);
             Brush bsh = new SolidBrush(col);
-            
+
             textBox3.Clear();
             zoomx = pictureBox1.Width / 240f;
             if (zoomx < 1) zoomx = 1f;
@@ -397,6 +398,7 @@ namespace img_player
 
                 if (imgDealEnable.Checked)
                 {
+                    
                     rect = new Rectangle((int)(img_Handler.LeftBlack[i] * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
                     e.Graphics.FillRectangle(Brushes.Green, rect);
                     rect = new Rectangle((int)(img_Handler.RightBlack[i] * 3 * zoomx), (int)(i * 3 * zoomy), rectl, rectw);
@@ -412,6 +414,14 @@ namespace img_player
 
                 }
 
+            }
+            if (img_Handler.dir == "圆环")
+            {
+                for (int a = img_Handler.highY; a < 60; a++)
+                {
+                    rect = new Rectangle((int)(img_Handler.AddCircleLine[a] * 3 * zoomx), (int)(a * 3 * zoomy), rectl, rectw);
+                    e.Graphics.FillRectangle(Brushes.Green, rect);
+                }
             }
             for (int j = 0; j < 60; j++)
             {
