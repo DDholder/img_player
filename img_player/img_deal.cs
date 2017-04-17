@@ -77,7 +77,7 @@ namespace img_player
             MidLineProcess();//中心线处理
             //RTRecognition();//赛道检测
             DirectionCtrol();
-            
+
         }
         void img_extract(int[] dst, int[] src, int srclen)
         {
@@ -134,6 +134,7 @@ namespace img_player
             return x > 0 ? x : -x;
         }
         public string dir;
+        int highL = 0, highM = 0, highR = 0;
         void GetBlackEndParam()//获取黑线截至行
         {
             LEndFlag = false;//左截至标志
@@ -144,34 +145,40 @@ namespace img_player
             BlackEndR = 0;//右截至计数
 
             int i = 0;
-
+            //2017年4月17日尝试圆环
             for (i = OV7725_EAGLE_H - 1; i >= 0; i--)
             {
                 if (IMG_BUFF[i, OV7725_EAGLE_W / 2 - 1] == White && !MEndFlag)
                 {
                     BlackEndM++;//中截至计数增加
+                    highM = BlackEndM;
                 }
                 else if (i > 1 && IMG_BUFF[i - 1, OV7725_EAGLE_W / 2 - 1] == Black && IMG_BUFF[i - 2, OV7725_EAGLE_W / 2 - 1] == Black)
                 {
                     MEndFlag = true;//上两行为黑，截至标志置位
+                    
                 }
 
                 if (IMG_BUFF[i, OV7725_EAGLE_W / 4 - 1] == White && !LEndFlag)
                 {
                     BlackEndL++;//左截至计数增加
+                    highL = BlackEndL;
                 }
                 else if (i > 1 && IMG_BUFF[i - 1, OV7725_EAGLE_W / 4 - 1] == Black && IMG_BUFF[i - 2, OV7725_EAGLE_W / 4 - 1] == Black)
                 {
                     LEndFlag = true;//上两行为黑，截至标志置位
+                   
                 }
 
                 if (IMG_BUFF[i, OV7725_EAGLE_W * 3 / 4 - 1] == White && !REndFlag)
                 {
                     BlackEndR++;//右截至计数增加
+                    highR = BlackEndR;
                 }
                 else if (i > 1 && IMG_BUFF[i - 1, OV7725_EAGLE_W * 3 / 4 - 1] == Black && IMG_BUFF[i - 2, OV7725_EAGLE_W * 3 / 4 - 1] == Black)
                 {
                     REndFlag = true;//上两行为黑，截至标志置位
+                    
                 }
             }
 
@@ -184,10 +191,10 @@ namespace img_player
             Iscircle = false;
             if (BlackEndMax == BlackEndL)
             {
-                if (BlackEndR > BlackEndM && BlackEndL - BlackEndM < 10 && BlackEndL > 30 && BlackEndR > 30 && BlackEndM > 30)
+                if (BlackEndR > BlackEndM /*&& BlackEndL - BlackEndM < 10 && BlackEndL > 30 && BlackEndR > 30 && BlackEndM > 30*/)
                 {
                     Iscircle = true;
-                    dir = "圆环";
+                    //dir = "圆环";
                     g_Derict = L_BlackEnd;
                 }
                 else
@@ -198,9 +205,9 @@ namespace img_player
             }
             else if (BlackEndMax == BlackEndR)
             {
-                if (BlackEndL > BlackEndM && BlackEndL - BlackEndM < 10 && BlackEndL > 30 && BlackEndR > 30 && BlackEndM > 30)
+                if (BlackEndL > BlackEndM /*&& BlackEndL - BlackEndM < 10 && BlackEndL > 30 && BlackEndR > 30 && BlackEndM > 30*/)
                 {
-                    dir = "圆环";
+                    //dir = "圆环";
                     g_Derict = R_BlackEnd;
                     Iscircle = true;
                 }
@@ -2131,7 +2138,7 @@ namespace img_player
             }
             //处理十字
             //ProcessCrossing();
-            
+
             if (!IsCrossing)
             {
                 if (StoreFlag)
@@ -2392,10 +2399,10 @@ namespace img_player
             MidLineExcursion = 0;
             if (dir == "圆环")                                //2017年4月16日尝试圆环
             {
-                for (int a = 59; a >= highY; a--)
+                for (int a = 59; a >= 0; a--)
                 {
                     LeftBlack[a] = (int)AddCircleLine[a];
-                    RightBlack[a] = 79;
+                    RightBlack[a] = 100;
                     BlackLineData[a] = (LeftBlack[a] + RightBlack[a]) / 2;
                 }
             }
@@ -2660,41 +2667,40 @@ namespace img_player
 
             LastError = Error;//更新	
         }
-        //2017年4月16日尝试圆环
+        //2017年4月17日尝试圆环
         public int lowX = 0, highY = 0, highX = 0;
         public float[] AddCircleLine = new float[60];
         void ProgressCircle()
         {
-            
-            if (dir == "圆环")
+            float temp = (highL - highR) / 40f;
+            int mtarget = (int)(highL - 20 * temp);
+            if (mtarget > highM&&temp<0.2) dir = "圆环";
+            for (int i = 0; i < 40; i++)
             {
-                for (int i = 0; i < 40; i++)
+                if (IMG_BUFF[59, i] == Black && IMG_BUFF[59, i + 1] == White)
                 {
-                    if (IMG_BUFF[59, i] == Black && IMG_BUFF[59, i + 1] == White)
-                    {
-                        lowX = i;
-                        break;
-                    }
-                    else
-                        lowX = 0;
+                    lowX = i;
+                    break;
                 }
-                for (int i = 59; i >0; i--)
+                else
+                    lowX = 0;
+            }
+            for (int i = 59; i > 0; i--)
+            {
+                if (IMG_BUFF[i, 39] == Black)
                 {
-                    if(IMG_BUFF[i,39]==Black)
-                    {
-                        highY = i;
-                        break;
-                    }
+                    highY = i;
+                    break;
                 }
-                highX = 39;
-                float temp = (highX - lowX) / (60f - highY);
-                for (int i = 59; i >= 0; i--)
+            }
+            highX = 39;
+            temp = (highX - lowX) / (60f - highY);
+            for (int i = 59; i >= 0; i--)
+            {
+                if (i == 59) AddCircleLine[i] = lowX;
+                else
                 {
-                    if (i == 59) AddCircleLine[i] = lowX;
-                    else
-                    {
-                        AddCircleLine[i] = AddCircleLine[i + 1]+temp;
-                    }
+                    AddCircleLine[i] = AddCircleLine[i + 1] + temp;
                 }
             }
         }
